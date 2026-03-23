@@ -209,11 +209,23 @@ export const requestPasswordReset = async (identifier) => {
     } else {
       await sendOTPSMS(user.phone, otp);
     }
-  } catch (error) {
-    // If sending fails, delete the OTP and throw error
-    await db.execute('DELETE FROM password_reset_otps WHERE id = ?', [otpId]);
-    throw new ApiError(500, `Failed to send OTP. Please try again later.`);
-  }
+} catch (error) {
+  // 🔍 Log detailed error in console (backend only)
+  console.error("❌ Fast2SMS Error:", {
+    message: error.message,
+    response: error.response?.data,
+    status: error.response?.status
+  });
+
+  // 🧹 Delete OTP if SMS failed
+  await db.execute(
+    'DELETE FROM password_reset_otps WHERE id = ?',
+    [otpId]
+  );
+
+  // 🚫 Send only generic message to frontend
+  throw new ApiError(500, "Failed to send OTP. Please try again later.");
+}
 
   // Log action
   await logAudit('PASSWORD_RESET_REQUEST', user.id, user.id, `Password reset OTP sent to ${identifier}`);

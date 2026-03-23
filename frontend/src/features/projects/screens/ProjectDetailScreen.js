@@ -1656,6 +1656,27 @@ const ProjectDetailScreen = ({ route, navigation }) => {
           </LinearGradient>
         </TouchableOpacity>
 
+        {/* Orders Button */}
+        <TouchableOpacity
+          style={styles.sitePlansButton}
+          onPress={() => navigation.navigate('OrdersList', {
+            projectId: project?.id,
+            projectName: project?.name,
+          })}
+          activeOpacity={0.8}
+        >
+          <LinearGradient
+            colors={['#2563EB', '#1D4ED8']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.sitePlansGradient}
+          >
+            <FontAwesome5 name="box" size={20} color={colors.surface} />
+            <Text style={styles.sitePlansButtonText}>View Orders</Text>
+            <MaterialIcons name="chevron-right" size={20} color={colors.surface} />
+          </LinearGradient>
+        </TouchableOpacity>
+
         {/* Payment Summary Section */}
         {shouldShowPaymentSummary && (
           <View style={styles.infoCard}>

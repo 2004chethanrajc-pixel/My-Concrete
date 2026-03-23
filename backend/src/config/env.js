@@ -26,7 +26,7 @@ export const config = {
   },
   
   fast2sms: {
-    apiKey: process.env.FAST2SMS_API_KEY || '',
+    apiKey: process.env.FAST2SMS_API_KEY || 'CJEePd0gt6mCSsVVsYqAmgRQO9vfF6lFIMHHMw0BclmVGZLHR527VKquaWNL',
     apiUrl: process.env.FAST2SMS_API_URL || 'https://www.fast2sms.com/dev/bulkV2'
   },
   

@@ -51,7 +51,7 @@ const OrderCard = ({ order, onPress }) => {
   );
 };
 
-const OrdersListScreen = ({ navigation }) => {
+const OrdersListScreen = ({ navigation, route }) => {
   const { user } = useAuth();
   const { orders, loading, error, refetch } = useOrders();
   const [refreshing, setRefreshing] = useState(false);
@@ -59,6 +59,13 @@ const OrdersListScreen = ({ navigation }) => {
   const [showExportMenu, setShowExportMenu] = useState(false);
   const exportButtonRef = useRef(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
+
+  const projectId = route?.params?.projectId || null;
+  const projectName = route?.params?.projectName || null;
+
+  const displayOrders = projectId
+    ? orders.filter(o => o.project_id === projectId)
+    : orders;
 
   useEffect(() => {
     // Calculate menu position when showExportMenu changes
@@ -84,7 +91,7 @@ const OrdersListScreen = ({ navigation }) => {
       setShowExportMenu(false);
       const logo = await getLogoBase64();
       const timestamp = getPdfTimestamp();
-      const rows = orders.map(o => `
+      const rows = displayOrders.map(o => `
          <tr>
            <td>${o.order_number}</td>
            <td>${o.customer_name || '-'}</td>
@@ -103,8 +110,8 @@ const OrdersListScreen = ({ navigation }) => {
           th{background:#2563EB;color:#fff}tr:nth-child(even){background:#f9fafb}
         </style></head><body>
         ${logo ? `<img src="${logo}" style="height:50px;margin-bottom:12px;" />` : ''}
-        <h2 style="color:#1F2937;margin-bottom:4px;">Orders History</h2>
-        <p style="color:#6B7280;font-size:12px;margin-bottom:16px;">Total: ${orders.length} orders</p>
+        <h2 style="color:#1F2937;margin-bottom:4px;">Orders${projectName ? ' — ' + projectName : ''}</h2>
+        <p style="color:#6B7280;font-size:12px;margin-bottom:16px;">Total: ${displayOrders.length} orders</p>
         <table><thead><tr>
           <th>Order #</th><th>Customer</th><th>Product</th><th>Qty</th>
           <th>Amount</th><th>Advance</th><th>Balance</th><th>Status</th><th>Date</th>
@@ -125,7 +132,7 @@ const OrdersListScreen = ({ navigation }) => {
       setExportLoading(true);
       setShowExportMenu(false);
       const headers = ['Order #', 'Customer', 'Product', 'Quantity', 'Unit', 'Total Amount', 'Advance Paid', 'Balance Paid', 'Status', 'Finance', 'PM', 'Date'];
-      const rows = orders.map(o => [
+      const rows = displayOrders.map(o => [
         o.order_number, o.customer_name || '', o.product_type,
         o.quantity || '', o.unit || '', o.total_amount || '',
         o.advance_paid ? 'Yes' : 'No', o.balance_paid ? 'Yes' : 'No',
@@ -148,7 +155,7 @@ const OrdersListScreen = ({ navigation }) => {
       setExportLoading(true);
       setShowExportMenu(false);
       const headers = ['Order #', 'Customer', 'Product', 'Quantity', 'Unit', 'Total Amount', 'Advance Paid', 'Balance Paid', 'Status', 'Finance', 'PM', 'Date'];
-      const rows = orders.map(o => [
+      const rows = displayOrders.map(o => [
         o.order_number, o.customer_name || '', o.product_type,
         o.quantity || '', o.unit || '', o.total_amount || '',
         o.advance_paid ? 'Yes' : 'No', o.balance_paid ? 'Yes' : 'No',
@@ -175,7 +182,19 @@ const OrdersListScreen = ({ navigation }) => {
     <View style={styles.container}>
       <AppHeader navigation={navigation} />
       <View style={styles.toolbar}>
-        <Text style={styles.title}>Orders</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+          {projectId ? (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 10, padding: 4 }}>
+              <MaterialIcons name="arrow-back" size={22} color="#1F2937" />
+            </TouchableOpacity>
+          ) : null}
+          <View style={{ flex: 1 }}>
+            <Text style={styles.title}>{projectId ? 'Orders' : 'Orders'}</Text>
+            {projectId && projectName ? (
+              <Text style={{ fontSize: 12, color: '#6B7280', marginTop: 1 }} numberOfLines={1}>{projectName}</Text>
+            ) : null}
+          </View>
+        </View>
         <View style={styles.headerActions}>
           <View ref={exportButtonRef} collapsable={false}>
             <TouchableOpacity 
@@ -241,7 +260,7 @@ const OrdersListScreen = ({ navigation }) => {
         </View>
       ) : (
         <FlatList
-          data={orders}
+          data={displayOrders}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <OrderCard
@@ -250,11 +269,11 @@ const OrdersListScreen = ({ navigation }) => {
             />
           )}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#2563EB']} />}
-          contentContainerStyle={orders.length === 0 ? styles.emptyContainer : styles.list}
+          contentContainerStyle={displayOrders.length === 0 ? styles.emptyContainer : styles.list}
           ListEmptyComponent={
             <View style={styles.center}>
               <FontAwesome5 name="box-open" size={48} color="#D1D5DB" />
-              <Text style={styles.emptyText}>No orders yet</Text>
+              <Text style={styles.emptyText}>{projectId ? 'No orders for this project' : 'No orders yet'}</Text>
             </View>
           }
         />
