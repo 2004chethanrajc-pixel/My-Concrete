@@ -1,0 +1,376 @@
+.quotations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.quotation-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid #ffba0dff;
+}
+
+.quotation-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.quotation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.quotation-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #114aa6ff, #1e5bbf);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+}
+
+.quotation-status {
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quotation-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.quotation-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.quotation-detail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.quotation-detail i {
+  color: #ffba0dff !important;
+  width: 16px;
+  font-size: 14px;
+}
+
+.btn-view-quotation {
+  width: 100%;
+  background: #114aa6ff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+.btn-view-quotation:hover {
+  background: #0d3a7f;
+}
+
+.btn-view-quotation i {
+  font-size: 12px;
+}
+/* Section styling */
+.section {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #114aa6ff;
+  margin-bottom: 20px;
+}
+
+/* Pending quotation cards */
+.pending-quotation {
+  border-left-color: #f59e0b;
+}
+
+.pending-quotation .quotation-icon {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.quotation-status.pending {
+  background-color: #f59e0b;
+}
+
+.btn-generate-quotation {
+  width: 100%;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+.btn-generate-quotation:hover {
+  background: #d97706;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 0 24px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #114aa6ff;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.modal-close:hover {
+  background: #f3f4f6;
+}
+
+.modal-body {
+  padding: 0 24px 24px 24px;
+}
+
+.project-info {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.project-info h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.project-info p {
+  color: #666;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #114aa6ff;
+}
+
+.cost-breakdown {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  color:black;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.breakdown-item:last-child {
+  border-bottom: none;
+  font-weight: 600;
+  color: #114aa6ff;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-cancel {
+  flex: 1;
+  background: #f3f4f6;
+  color: #666;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.btn-submit {
+  flex: 1;
+  background: #114aa6ff;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: #0d3a7f;
+}
+
+.btn-submit:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+/* Form validation styles */
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+  border-color: #ef4444;
+}
+
+.error-text {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.helper-text {
+  color: #6b7280;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+  font-style: italic;
+}
+
+.helper-text.auto-calc {
+  color: #3b82f6;
+}
+
+.total-cost-input {
+  background-color: #f9fafb !important;
+  color: #3b82f6 !important;
+  font-weight: 600;
+}
+
+.cost-breakdown h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #114aa6ff;
+  margin-bottom: 12px;
+}
+
+.breakdown-item.total {
+  border-top: 2px solid #114aa6ff;
+  padding-top: 12px;
+  margin-top: 8px;
+  font-weight: 600;
+  color: #114aa6ff;
+  font-size: 16px;
+}
+
+.breakdown-item.advance {
+  color: #f59e0b;
+  font-weight: 600;
+}

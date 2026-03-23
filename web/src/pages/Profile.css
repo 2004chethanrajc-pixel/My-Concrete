@@ -1,0 +1,318 @@
+/* Profile.css - Matches Mobile App Exactly */
+
+:root {
+  --background: #1F2937; /* Dark grey background like mobile */
+  --card-bg: #2D3748; /* Darker grey for card like mobile */
+  --text-primary: #FFFFFF;
+  --text-secondary: #CBD5E0;
+  --text-muted: #A0AEC0;
+  --border: #4A5568;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.profile-page {
+  min-height: 100vh;
+  background: var(--background);
+}
+
+/* Profile Header */
+.profile-header {
+  padding: 40px 20px 60px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.header-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.avatar-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-container i {
+  font-size: 70px;
+  color: white;
+}
+
+.role-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 30px;
+  border: 2px solid white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.role-badge i {
+  font-size: 12px;
+  color: white;
+}
+
+.role-badge-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.3px;
+}
+
+.user-name {
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.user-email {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 10px;
+}
+
+/* Profile Content */
+.profile-content {
+  max-width: 800px;
+  margin: -30px auto 0;
+  padding: 0 20px 40px;
+}
+
+/* Info Card - Matches mobile exactly */
+.info-card {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.info-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border);
+}
+
+/* Info Rows - Matches mobile exactly */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.info-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-icon i {
+  font-size: 18px;
+}
+
+.info-label {
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 15px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Logout Button - Matches mobile exactly */
+.logout-container {
+  margin-top: 32px;
+}
+
+.logout-button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: #EF4444;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+}
+
+.logout-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(239, 68, 68, 0.4);
+}
+
+.logout-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.logout-button i {
+  font-size: 18px;
+}
+
+/* Version Info - Matches mobile exactly */
+.version-container {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.version-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.copyright-text {
+  font-size: 11px;
+  color: #718096;
+}
+
+/* Profile Loading */
+.profile-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 16px;
+}
+
+.profile-loading p {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top-color: #3B82F6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive Design - Matches mobile */
+@media (max-width: 768px) {
+  .profile-header {
+    padding: 30px 15px 50px;
+  }
+  
+  .avatar-container {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .avatar-container i {
+    font-size: 60px;
+  }
+  
+  .user-name {
+    font-size: 26px;
+  }
+  
+  .profile-content {
+    padding: 0 15px 30px;
+  }
+  
+  .info-card {
+    padding: 20px;
+  }
+  
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .info-value {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 12px;
+    border-radius: 20px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-container {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .avatar-container i {
+    font-size: 50px;
+  }
+  
+  .role-badge {
+    padding: 4px 12px;
+  }
+  
+  .user-name {
+    font-size: 22px;
+  }
+  
+  .user-email {
+    font-size: 14px;
+  }
+  
+  .info-card-title {
+    font-size: 18px;
+  }
+}
