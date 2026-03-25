@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   View,
   Text,
@@ -13,11 +14,13 @@ import {
 import { FontAwesome5 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { captureRef } from 'react-native-view-shot';
-import { colors } from '../../../theme/colors';
+// import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
 import { signaturesApi } from '../api';
 
 const SignatureScreen = ({ route, navigation }) => {
+  const { colors } = useTheme();
+  const styles = useMemo(() => getStyles(colors), [colors]);
   const { project } = route.params;
   const [loading, setLoading] = useState(false);
   const [signatureImage, setSignatureImage] = useState(null);
@@ -302,7 +305,7 @@ const SignatureScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

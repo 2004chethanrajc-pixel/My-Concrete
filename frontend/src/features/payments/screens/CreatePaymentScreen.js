@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   View,
   Text,
@@ -10,12 +11,14 @@ import {
   Alert,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { colors } from '../../../theme/colors';
+// import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
 import { useCreatePayment } from '../hooks';
 import { quotationsApi } from '../../quotations/api';
 
 const CreatePaymentScreen = ({ route, navigation }) => {
+  const { colors } = useTheme();
+  const styles = useMemo(() => getStyles(colors), [colors]);
   const { project } = route.params;
   const [amount, setAmount] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -241,7 +244,7 @@ const CreatePaymentScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

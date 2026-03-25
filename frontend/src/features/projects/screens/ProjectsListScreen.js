@@ -21,6 +21,7 @@ import { useScrollPosition } from '../../../hooks/useScrollPosition';
 import { projectsApi } from '../api';
 import { visitsApi } from '../../visits/api';
 import { theme } from '../../../theme/theme';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   PrimaryButton,
   DangerButton,
@@ -37,6 +38,7 @@ const ProjectsListScreen = ({ navigation, route }) => {
   const { projects, loading, error, refetch } = useProjects();
   const { user } = useAuth();
   const { scrollY, onScroll } = useScrollPosition();
+  const { colors } = useTheme();
   const [deleting, setDeleting] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -275,10 +277,10 @@ const ProjectsListScreen = ({ navigation, route }) => {
             <FontAwesome5 name="hard-hat" size={18} color={getStatusColor(item.status)} />
           </View>
           <View style={styles.projectTitleContent}>
-            <Text style={styles.projectName} numberOfLines={1}>{item.name}</Text>
+            <Text style={[styles.projectName, { color: colors.textPrimary }]} numberOfLines={1}>{item.name}</Text>
             <View style={styles.projectLocationContainer}>
               <MaterialIcons name="location-on" size={12} color="#9CA3AF" />
-              <Text style={styles.projectLocation} numberOfLines={1}>{item.location || 'No location'}</Text>
+              <Text style={[styles.projectLocation, { color: colors.textSecondary }]} numberOfLines={1}>{item.location || 'No location'}</Text>
             </View>
           </View>
         </View>
@@ -292,7 +294,7 @@ const ProjectsListScreen = ({ navigation, route }) => {
       <View style={styles.projectCardBody}>
         <View style={styles.projectMetaItem}>
           <FontAwesome5 name="calendar-alt" size={12} color="#9CA3AF" />
-          <Text style={styles.projectMetaText}>
+          <Text style={[styles.projectMetaText, { color: colors.textSecondary }]}>
             {item.created_at ? new Date(item.created_at).toLocaleDateString('en-US', { 
               month: 'short', 
               day: 'numeric',
@@ -302,14 +304,14 @@ const ProjectsListScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.projectMetaItem}>
           <FontAwesome5 name="user-tie" size={12} color="#9CA3AF" />
-          <Text style={styles.projectMetaText}>
+          <Text style={[styles.projectMetaText, { color: colors.textSecondary }]}>
             {item.pm_name || 'Unassigned'}
           </Text>
         </View>
       </View>
 
       {isAdmin && (
-        <View style={styles.projectCardFooter}>
+        <View style={[styles.projectCardFooter, { borderTopColor: colors.border }]}>
           <TouchableOpacity 
             style={styles.deleteButton}
             onPress={() => handleDeleteProject(item)}
@@ -337,15 +339,15 @@ const ProjectsListScreen = ({ navigation, route }) => {
       onRequestClose={() => setShowFilterModal(false)}
     >
       <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
+        <View style={[styles.modalContent, { backgroundColor: colors.modalBg }]}>
           <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Sort & Filter</Text>
+            <Text style={[styles.modalTitle, { color: colors.textPrimary }]}>Sort & Filter</Text>
             <TouchableOpacity onPress={() => setShowFilterModal(false)}>
-              <Ionicons name="close" size={24} color="#1F2937" />
+              <Ionicons name="close" size={24} color={colors.textPrimary} />
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.modalSectionTitle}>Sort By</Text>
+          <Text style={[styles.modalSectionTitle, { color: colors.textPrimary }]}>Sort By</Text>
           <View style={styles.sortOptions}>
             {[
               { label: 'Newest First', value: 'newest' },
@@ -357,12 +359,14 @@ const ProjectsListScreen = ({ navigation, route }) => {
                 key={option.value}
                 style={[
                   styles.sortOption,
+                  { backgroundColor: colors.sectionBg, borderColor: colors.border },
                   sortBy === option.value && styles.sortOptionActive
                 ]}
                 onPress={() => setSortBy(option.value)}
               >
                 <Text style={[
                   styles.sortOptionText,
+                  { color: colors.textSecondary },
                   sortBy === option.value && styles.sortOptionTextActive
                 ]}>
                   {option.label}
@@ -387,7 +391,7 @@ const ProjectsListScreen = ({ navigation, route }) => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} title="Projects" />
         <LoadingState message="Loading projects..." />
         <BottomNavigation navigation={navigation} activeRoute="ProjectsList" scrollY={scrollY} />
@@ -397,12 +401,12 @@ const ProjectsListScreen = ({ navigation, route }) => {
 
   if (error) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} title="Projects" />
         <View style={styles.errorContainer}>
-          <View style={styles.errorCard}>
+          <View style={[styles.errorCard, { backgroundColor: colors.cardBg }]}>
             <FontAwesome5 name="exclamation-triangle" size={48} color="#EF4444" />
-            <Text style={styles.errorText}>{error}</Text>
+            <Text style={[styles.errorText, { color: colors.textSecondary }]}>{error}</Text>
             <PrimaryButton title="Retry" onPress={refetch} style={styles.retryButton} />
           </View>
         </View>
@@ -412,7 +416,7 @@ const ProjectsListScreen = ({ navigation, route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
       <AppHeader navigation={navigation} title="Projects" />
 
@@ -420,12 +424,12 @@ const ProjectsListScreen = ({ navigation, route }) => {
         {/* Search and Filter Bar */}
         <View style={styles.searchFilterContainer}>
           <View style={styles.searchContainer}>
-            <View style={styles.searchInputContainer}>
+            <View style={[styles.searchInputContainer, { backgroundColor: colors.inputBg, borderColor: colors.border }]}>
               <Ionicons name="search" size={18} color="#9CA3AF" style={styles.searchIcon} />
               <TextInput
-                style={styles.searchInput}
+                style={[styles.searchInput, { color: colors.textPrimary }]}
                 placeholder="Search projects..."
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.placeholderText}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
               />
@@ -438,7 +442,7 @@ const ProjectsListScreen = ({ navigation, route }) => {
           </View>
 
           <TouchableOpacity 
-            style={styles.filterButton}
+            style={[styles.filterButton, { backgroundColor: colors.inputBg, borderColor: colors.border }]}
             onPress={() => setShowFilterModal(true)}
           >
             <Ionicons name="options-outline" size={20} color="#2563EB" />
@@ -461,7 +465,7 @@ const ProjectsListScreen = ({ navigation, route }) => {
 
         {/* Results Count */}
         <View style={styles.resultsContainer}>
-          <Text style={styles.resultsText}>
+          <Text style={[styles.resultsText, { color: colors.textSecondary }]}>
             {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'} found
           </Text>
         </View>

@@ -14,6 +14,7 @@ import { Card, PrimaryButton, DangerButton, LoadingState, EmptyState } from '../
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
 import { makeCall, sendEmail } from '../../../utils/contactUtils';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
@@ -31,6 +32,7 @@ const UsersListScreen = ({ navigation, route }) => {
   const [editForm, setEditForm] = useState({});
   const [savingEdit, setSavingEdit] = useState(false);
   const { scrollY, onScroll } = useScrollPosition();
+  const { colors } = useTheme();
 
   const roleFilter = route.params?.role;
   const activeOnly = route.params?.activeOnly;
@@ -210,7 +212,7 @@ const UsersListScreen = ({ navigation, route }) => {
       <Card variant="elevated" style={styles.userCard}>
         <View style={styles.userHeader}>
           <View style={styles.userNameContainer}>
-            <Text style={styles.userName} numberOfLines={1}>{item.name}</Text>
+            <Text style={[styles.userName, { color: colors.textPrimary }]} numberOfLines={1}>{item.name}</Text>
             {!item.is_active && (
               <View style={styles.inactiveBadge}>
                 <Text style={styles.inactiveBadgeText}>Inactive</Text>
@@ -224,26 +226,26 @@ const UsersListScreen = ({ navigation, route }) => {
 
         <View style={styles.cardDetails}>
           <View style={styles.cardDetailRow}>
-            <FontAwesome5 name="envelope" size={14} color="#6B7280" style={styles.cardDetailIcon} />
+            <FontAwesome5 name="envelope" size={14} color={colors.subText} style={styles.cardDetailIcon} />
             <TouchableOpacity onPress={() => sendEmail(item.email)}>
-              <Text style={[styles.cardDetailText, styles.linkText]} numberOfLines={1}>{item.email}</Text>
+              <Text style={[styles.cardDetailText, styles.linkText, { color: colors.textSecondary }]} numberOfLines={1}>{item.email}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.cardDetailRow}>
-            <FontAwesome5 name="phone" size={14} color="#6B7280" style={styles.cardDetailIcon} />
+            <FontAwesome5 name="phone" size={14} color={colors.subText} style={styles.cardDetailIcon} />
             <TouchableOpacity onPress={() => item.phone && makeCall(item.phone)}>
-              <Text style={[styles.cardDetailText, item.phone && styles.linkText]}>{getValue(item.phone)}</Text>
+              <Text style={[styles.cardDetailText, item.phone && styles.linkText, { color: colors.textSecondary }]}>{getValue(item.phone)}</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.cardDetailRow}>
-            <FontAwesome5 name="map-marker-alt" size={14} color="#6B7280" style={styles.cardDetailIcon} />
-            <Text style={styles.cardDetailText} numberOfLines={1}>{getValue(item.city)}</Text>
+            <FontAwesome5 name="map-marker-alt" size={14} color={colors.subText} style={styles.cardDetailIcon} />
+            <Text style={[styles.cardDetailText, { color: colors.textSecondary }]} numberOfLines={1}>{getValue(item.city)}</Text>
           </View>
         </View>
 
-        <Text style={styles.cardTapHint}>👆 Tap for profile insights</Text>
+        <Text style={[styles.cardTapHint, { color: colors.textLight }]}>👆 Tap for profile insights</Text>
 
         {(canDeactivateUser(item) || canActivateUser(item)) && (
           <View style={styles.userActions}>
@@ -287,7 +289,7 @@ const UsersListScreen = ({ navigation, route }) => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
         <LoadingState message="Loading users..." />
       </View>
@@ -295,22 +297,22 @@ const UsersListScreen = ({ navigation, route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <AppHeader navigation={navigation} />
       <View style={styles.content}>
-        <View style={styles.searchContainer}>
-          <View style={styles.searchInputContainer}>
-            <FontAwesome5 name="search" size={16} color={theme.colors.textSecondary} style={styles.searchIcon} />
+        <View style={[styles.searchContainer, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
+          <View style={[styles.searchInputContainer, { backgroundColor: colors.inputBg, borderColor: colors.border }]}>
+            <FontAwesome5 name="search" size={16} color={colors.textSecondary} style={styles.searchIcon} />
             <TextInput
-              style={styles.searchInput}
+              style={[styles.searchInput, { color: colors.textPrimary }]}
               placeholder="Search users..."
-              placeholderTextColor={theme.colors.textSecondary}
+              placeholderTextColor={colors.placeholderText}
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
             {searchQuery.length > 0 && (
               <TouchableOpacity onPress={() => setSearchQuery('')}>
-                <FontAwesome5 name="times-circle" size={16} color={theme.colors.textSecondary} />
+                <FontAwesome5 name="times-circle" size={16} color={colors.textSecondary} />
               </TouchableOpacity>
             )}
           </View>
@@ -356,7 +358,7 @@ const UsersListScreen = ({ navigation, route }) => {
         onRequestClose={() => setInsightModalVisible(false)}
       >
         <View style={styles.insightOverlay}>
-          <View style={styles.insightContainer}>
+          <View style={[styles.insightContainer, { backgroundColor: colors.modalBg }]}>
             {/* Decorative Header Strip */}
             <View style={[styles.insightHeaderStrip, { 
               backgroundColor: selectedUser ? getRoleColor(selectedUser.role) : '#FF6B6B' 
@@ -401,7 +403,7 @@ const UsersListScreen = ({ navigation, route }) => {
                   </View>
 
                   {/* User Name and Role */}
-                  <Text style={styles.insightName}>{selectedUser.name}</Text>
+                  <Text style={[styles.insightName, { color: colors.textPrimary }]}>{selectedUser.name}</Text>
                   <View style={[styles.insightRolePill, { 
                     backgroundColor: getRoleColor(selectedUser.role) + '20' 
                   }]}>
@@ -413,14 +415,14 @@ const UsersListScreen = ({ navigation, route }) => {
                   </View>
 
                   {/* Combined Information Card - All in One Section with Full Details */}
-                  <View style={styles.insightCombinedCard}>
+                  <View style={[styles.insightCombinedCard, { backgroundColor: colors.surfaceSecondary, borderColor: colors.border }]}>
                     {/* Email - Full */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="envelope" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>Email</Text>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>Email</Text>
                         <TouchableOpacity onPress={() => sendEmail(selectedUser.email)}>
                           <Text style={[styles.insightFieldValue, styles.linkText]} selectable>{selectedUser.email}</Text>
                         </TouchableOpacity>
@@ -428,107 +430,107 @@ const UsersListScreen = ({ navigation, route }) => {
                     </View>
 
                     {/* Phone - Full */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="phone" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>Phone</Text>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>Phone</Text>
                         <TouchableOpacity onPress={() => selectedUser.phone && makeCall(selectedUser.phone)}>
-                          <Text style={[styles.insightFieldValue, selectedUser.phone && styles.linkText]}>{getValue(selectedUser.phone)}</Text>
+                          <Text style={[styles.insightFieldValue, { color: colors.textPrimary }, selectedUser.phone && styles.linkText]}>{getValue(selectedUser.phone)}</Text>
                         </TouchableOpacity>
                       </View>
                     </View>
 
                     {/* Date of Birth - Full */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="birthday-cake" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>Date of Birth</Text>
-                        <Text style={styles.insightFieldValue}>{formatDate(selectedUser.date_of_birth)}</Text>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>Date of Birth</Text>
+                        <Text style={[styles.insightFieldValue, { color: colors.textPrimary }]}>{formatDate(selectedUser.date_of_birth)}</Text>
                       </View>
                     </View>
 
                     {/* Date of Joining - Full */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="calendar-alt" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>Date of Joining</Text>
-                        <Text style={styles.insightFieldValue}>{formatDate(selectedUser.date_of_joining)}</Text>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>Date of Joining</Text>
+                        <Text style={[styles.insightFieldValue, { color: colors.textPrimary }]}>{formatDate(selectedUser.date_of_joining)}</Text>
                       </View>
                     </View>
 
                     {/* City - Full */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="map-marker-alt" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>City</Text>
-                        <Text style={styles.insightFieldValue}>{getValue(selectedUser.city)}</Text>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>City</Text>
+                        <Text style={[styles.insightFieldValue, { color: colors.textPrimary }]}>{getValue(selectedUser.city)}</Text>
                       </View>
                     </View>
 
                     {/* Current Address - Full (multi-line) */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="home" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>Current Address</Text>
-                        <Text style={styles.insightFieldValueMulti}>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>Current Address</Text>
+                        <Text style={[styles.insightFieldValueMulti, { color: colors.textPrimary }]}>
                           {getValue(selectedUser.current_address)}
                         </Text>
                       </View>
                     </View>
 
                     {/* Permanent Address - Full (multi-line) */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="building" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>Permanent Address</Text>
-                        <Text style={styles.insightFieldValueMulti}>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>Permanent Address</Text>
+                        <Text style={[styles.insightFieldValueMulti, { color: colors.textPrimary }]}>
                           {getValue(selectedUser.permanent_address)}
                         </Text>
                       </View>
                     </View>
 
                     {/* Account Created - Full */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="calendar" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>Account Created</Text>
-                        <Text style={styles.insightFieldValue}>{formatDate(selectedUser.created_at)}</Text>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>Account Created</Text>
+                        <Text style={[styles.insightFieldValue, { color: colors.textPrimary }]}>{formatDate(selectedUser.created_at)}</Text>
                       </View>
                     </View>
 
                     {/* Active Projects - Full */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="project-diagram" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>Active Projects</Text>
-                        <Text style={styles.insightFieldValue}>{selectedUser.active_projects || 0}</Text>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>Active Projects</Text>
+                        <Text style={[styles.insightFieldValue, { color: colors.textPrimary }]}>{selectedUser.active_projects || 0}</Text>
                       </View>
                     </View>
 
                     {/* User ID - Full (with copy ability) */}
-                    <View style={styles.insightFullRow}>
+                    <View style={[styles.insightFullRow, { borderBottomColor: colors.divider }]}>
                       <View style={styles.insightIconContainer}>
                         <FontAwesome5 name="fingerprint" size={16} color={getRoleColor(selectedUser.role)} />
                       </View>
                       <View style={styles.insightTextContainer}>
-                        <Text style={styles.insightFieldLabel}>User ID</Text>
-                        <Text style={styles.insightFieldValue} selectable>{selectedUser.id}</Text>
+                        <Text style={[styles.insightFieldLabel, { color: colors.textSecondary }]}>User ID</Text>
+                        <Text style={[styles.insightFieldValue, { color: colors.textPrimary }]} selectable>{selectedUser.id}</Text>
                       </View>
                     </View>
                   </View>
@@ -603,7 +605,7 @@ const UsersListScreen = ({ navigation, route }) => {
       {/* Edit User Modal */}
       <Modal animationType="slide" transparent visible={showEditModal} onRequestClose={() => { setShowEditModal(false); setInsightModalVisible(true); }}>
         <View style={styles.insightOverlay}>
-          <View style={[styles.insightContainer, { maxHeight: '90%' }]}>
+          <View style={[styles.insightContainer, { maxHeight: '90%', backgroundColor: colors.modalBg }]}>
             <View style={[styles.insightHeaderStrip, { backgroundColor: selectedUser ? getRoleColor(selectedUser.role) : '#4361EE' }]} />
             <TouchableOpacity style={styles.insightCloseBtn} onPress={() => { setShowEditModal(false); setInsightModalVisible(true); }}>
               <Ionicons name="close" size={20} color="#FFF" />

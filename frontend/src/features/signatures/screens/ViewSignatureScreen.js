@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   View,
   Text,
@@ -16,7 +17,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import * as Print from 'expo-print';
 import { getLogoBase64, getPdfTimestamp, getPdfHeaderFooterCSS, getPdfLogoHtml, getPdfTimestampHtml } from '../../../utils/pdfUtils';
-import { colors } from '../../../theme/colors';
+// import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
 import { signaturesApi } from '../api';
 import { projectsApi } from '../../projects/api';
@@ -24,6 +25,8 @@ import { getBaseUrl, getImageUrl } from '../../../config/api.config';
 import { sendEmail } from '../../../utils/contactUtils';
 
 const ViewSignatureScreen = ({ route, navigation }) => {
+  const { colors } = useTheme();
+  const styles = useMemo(() => getStyles(colors), [colors]);
   const { projectId, project } = route.params;
   const [loading, setLoading] = useState(true);
   const [signature, setSignature] = useState(null);
@@ -351,7 +354,7 @@ const ViewSignatureScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

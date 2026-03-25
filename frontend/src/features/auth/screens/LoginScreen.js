@@ -17,10 +17,12 @@ import {
 import { useLogin } from '../hooks';
 import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { width, height } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation }) => {
+  const { colors: themeColors } = useTheme();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [sessionConflictVisible, setSessionConflictVisible] = useState(false);
@@ -64,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       {/* Background Floating Circles */}
@@ -79,11 +81,11 @@ const LoginScreen = ({ navigation }) => {
           <Image source={require('../../../assets/logo.png')} style={styles.logo} resizeMode="contain" />
         </View>
 
-        <View style={styles.form}>
+        <View style={[styles.form, { backgroundColor: themeColors.surface }]}>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: themeColors.surface, borderColor: themeColors.border, color: themeColors.textPrimary }]}
             placeholder="Email or Phone Number"
-            placeholderTextColor="#888"
+            placeholderTextColor={themeColors.textSecondary}
             value={identifier}
             onChangeText={setIdentifier}
             keyboardType="default"
@@ -93,9 +95,9 @@ const LoginScreen = ({ navigation }) => {
           />
 
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: themeColors.surface, borderColor: themeColors.border, color: themeColors.textPrimary }]}
             placeholder="Password"
-            placeholderTextColor="#888"
+            placeholderTextColor={themeColors.textSecondary}
             value={password}
             onChangeText={setPassword}
             secureTextEntry

@@ -3,9 +3,11 @@ import { View, TouchableOpacity, StyleSheet, Text, Platform } from 'react-native
 import { FontAwesome5 } from '@expo/vector-icons';
 import { theme } from '../../theme/theme';
 import { useAuth } from '../../hooks/useAuth';
+import { useTheme } from '../../context/ThemeContext';
 
 const BottomNavigation = ({ navigation, activeRoute, scrollY }) => {
   const { user } = useAuth();
+  const { colors } = useTheme();
 
   const getNavigationItems = () => {
     switch (user?.role) {
@@ -83,7 +85,7 @@ const BottomNavigation = ({ navigation, activeRoute, scrollY }) => {
   if (Platform.OS === 'web') return null;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
       {items.map((item, index) => {
         const uniqueKey = `${item.route}-${index}`;
         const isActive = activeRoute === item.route && items.filter(i => i.route === item.route).length === 1 

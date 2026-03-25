@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   View,
   Text,
@@ -11,6 +12,8 @@ import { useAuth } from '../../../hooks/useAuth';
 import { theme } from '../../../theme/theme';
 
 const DeactivatedAccountScreen = () => {
+  const { colors } = useTheme();
+  const styles = useMemo(() => getStyles(colors), [colors]);
   const { logout } = useAuth();
 
   const handleLogout = async () => {
@@ -47,7 +50,7 @@ const DeactivatedAccountScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.textWhite,

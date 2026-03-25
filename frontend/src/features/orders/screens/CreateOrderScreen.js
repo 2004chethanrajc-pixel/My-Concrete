@@ -10,6 +10,7 @@ import { useOrderActions } from '../hooks';
 import apiClient from '../../../services/apiClient';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -18,6 +19,7 @@ const UNITS = ['units', 'bags', 'cubic meters', 'tonnes', 'loads'];
 
 const CreateOrderScreen = ({ navigation }) => {
   const { user } = useAuth();
+  const { colors } = useTheme();
   const { createOrder, loading } = useOrderActions();
   const isAdmin = ['admin', 'super_admin'].includes(user?.role);
   const flatListRef = useRef(null);
@@ -114,7 +116,7 @@ const CreateOrderScreen = ({ navigation }) => {
     
     if (dropdownData.length === 0) {
       return (
-        <View style={styles.dropdown}>
+        <View style={[styles.dropdown, { backgroundColor: colors.surface, borderColor: colors.border }]}>
           <View style={styles.dropdownItem}>
             <Text style={styles.emptyText}>No items available</Text>
           </View>
@@ -124,7 +126,7 @@ const CreateOrderScreen = ({ navigation }) => {
     
     // CRITICAL: No maxHeight or fixed height - let it grow naturally
     return (
-      <View style={styles.dropdown}>
+      <View style={[styles.dropdown, { backgroundColor: colors.surface, borderColor: colors.border }]}>
         <FlatList
           data={dropdownData}
           keyExtractor={(item, index) => item?.id?.toString() || `none-${index}`}
@@ -134,14 +136,14 @@ const CreateOrderScreen = ({ navigation }) => {
           style={styles.dropdownList}
           renderItem={({ item }) => (
             <TouchableOpacity 
-              style={styles.dropdownItem}
+              style={[styles.dropdownItem, { borderBottomColor: colors.border }]}
               onPress={() => {
                 onSelect(item.id);
                 onClose();
               }}
               activeOpacity={0.7}
             >
-              <Text style={[styles.dropdownText, !item.id && { color: '#6B7280' }]}>
+              <Text style={[styles.dropdownText, { color: colors.textPrimary }, !item.id && { color: colors.textSecondary }]}>
                 {item.name || 'None'}
               </Text>
               {getSubText && item.email && (
@@ -172,9 +174,9 @@ const CreateOrderScreen = ({ navigation }) => {
       case 'customer':
         return isAdmin ? (
           <View style={styles.field}>
-            <Text style={styles.label}>Customer *</Text>
-            <TouchableOpacity style={styles.picker} onPress={() => setShowCustomerPicker(v => !v)}>
-              <Text style={selectedCustomer ? styles.pickerValue : styles.pickerPlaceholder}>
+            <Text style={[styles.label, { color: colors.textPrimary }]}>Customer *</Text>
+            <TouchableOpacity style={[styles.picker, { backgroundColor: colors.background, borderColor: colors.border }]} onPress={() => setShowCustomerPicker(v => !v)}>
+              <Text style={selectedCustomer ? [styles.pickerValue, { color: colors.textPrimary }] : styles.pickerPlaceholder}>
                 {selectedCustomerName || 'Select customer...'}
               </Text>
               <FontAwesome5 name={showCustomerPicker ? 'chevron-up' : 'chevron-down'} size={14} color="#6B7280" />
@@ -192,9 +194,9 @@ const CreateOrderScreen = ({ navigation }) => {
       case 'finance':
         return isAdmin ? (
           <View style={styles.field}>
-            <Text style={styles.label}>Assign Finance (optional)</Text>
-            <TouchableOpacity style={styles.picker} onPress={() => setShowFinancePicker(v => !v)}>
-              <Text style={selectedFinance ? styles.pickerValue : styles.pickerPlaceholder}>
+            <Text style={[styles.label, { color: colors.textPrimary }]}>Assign Finance (optional)</Text>
+            <TouchableOpacity style={[styles.picker, { backgroundColor: colors.background, borderColor: colors.border }]} onPress={() => setShowFinancePicker(v => !v)}>
+              <Text style={selectedFinance ? [styles.pickerValue, { color: colors.textPrimary }] : styles.pickerPlaceholder}>
                 {selectedFinanceName || 'Select finance user...'}
               </Text>
               <FontAwesome5 name={showFinancePicker ? 'chevron-up' : 'chevron-down'} size={14} color="#6B7280" />
@@ -212,9 +214,9 @@ const CreateOrderScreen = ({ navigation }) => {
       case 'projectManager':
         return isAdmin ? (
           <View style={styles.field}>
-            <Text style={styles.label}>Assign Project Manager (optional)</Text>
-            <TouchableOpacity style={styles.picker} onPress={() => setShowPmPicker(v => !v)}>
-              <Text style={selectedPm ? styles.pickerValue : styles.pickerPlaceholder}>
+            <Text style={[styles.label, { color: colors.textPrimary }]}>Assign Project Manager (optional)</Text>
+            <TouchableOpacity style={[styles.picker, { backgroundColor: colors.background, borderColor: colors.border }]} onPress={() => setShowPmPicker(v => !v)}>
+              <Text style={selectedPm ? [styles.pickerValue, { color: colors.textPrimary }] : styles.pickerPlaceholder}>
                 {selectedPmName || 'Select project manager...'}
               </Text>
               <FontAwesome5 name={showPmPicker ? 'chevron-up' : 'chevron-down'} size={14} color="#6B7280" />
@@ -232,13 +234,13 @@ const CreateOrderScreen = ({ navigation }) => {
       case 'productType':
         return (
           <View style={styles.field}>
-            <Text style={styles.label}>Product Type *</Text>
+            <Text style={[styles.label, { color: colors.textPrimary }]}>Product Type *</Text>
             <View style={styles.toggleRow}>
               {PRODUCT_TYPES.map((t, i) => (
                 <TouchableOpacity key={t}
-                  style={[styles.toggleBtn, form.productType === t && styles.toggleBtnActive, i === PRODUCT_TYPES.length - 1 && { marginRight: 0 }]}
+                  style={[styles.toggleBtn, { backgroundColor: colors.background, borderColor: colors.border }, form.productType === t && styles.toggleBtnActive, i === PRODUCT_TYPES.length - 1 && { marginRight: 0 }]}
                   onPress={() => set('productType', t)}>
-                  <Text style={[styles.toggleText, form.productType === t && styles.toggleTextActive]}>
+                  <Text style={[styles.toggleText, { color: colors.textPrimary }, form.productType === t && styles.toggleTextActive]}>
                     {t === 'concrete' ? '🏗️ Concrete' : '🧱 Bricks'}
                   </Text>
                 </TouchableOpacity>
@@ -250,10 +252,10 @@ const CreateOrderScreen = ({ navigation }) => {
       case 'description':
         return (
           <View style={styles.field}>
-            <Text style={styles.label}>Description</Text>
-            <TextInput style={styles.input} value={form.productDescription}
+            <Text style={[styles.label, { color: colors.textPrimary }]}>Description</Text>
+            <TextInput style={[styles.input, { backgroundColor: colors.background, borderColor: colors.border, color: colors.textPrimary }]} value={form.productDescription}
               onChangeText={v => set('productDescription', v)}
-              placeholder="e.g. M25 grade concrete" placeholderTextColor="#9CA3AF" />
+              placeholder="e.g. M25 grade concrete" placeholderTextColor={colors.textSecondary} />
           </View>
         );
 
@@ -261,19 +263,19 @@ const CreateOrderScreen = ({ navigation }) => {
         return (
           <View style={styles.row}>
             <View style={[styles.field, { flex: 1, marginRight: 8 }]}>
-              <Text style={styles.label}>Quantity *</Text>
-              <TextInput style={styles.input} value={form.quantity}
+              <Text style={[styles.label, { color: colors.textPrimary }]}>Quantity *</Text>
+              <TextInput style={[styles.input, { backgroundColor: colors.background, borderColor: colors.border, color: colors.textPrimary }]} value={form.quantity}
                 onChangeText={v => set('quantity', v)} keyboardType="numeric"
-                placeholder="0" placeholderTextColor="#9CA3AF" />
+                placeholder="0" placeholderTextColor={colors.textSecondary} />
             </View>
             <View style={[styles.field, { flex: 1 }]}>
-              <Text style={styles.label}>Unit</Text>
+              <Text style={[styles.label, { color: colors.textPrimary }]}>Unit</Text>
               <View style={styles.unitScroll}>
                 {UNITS.map(u => (
                   <TouchableOpacity key={u}
-                    style={[styles.unitBtn, form.unit === u && styles.unitBtnActive]}
+                    style={[styles.unitBtn, { backgroundColor: colors.background, borderColor: colors.border }, form.unit === u && styles.unitBtnActive]}
                     onPress={() => set('unit', u)}>
-                    <Text style={[styles.unitText, form.unit === u && styles.unitTextActive]}>{u}</Text>
+                    <Text style={[styles.unitText, { color: colors.textPrimary }, form.unit === u && styles.unitTextActive]}>{u}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -283,27 +285,27 @@ const CreateOrderScreen = ({ navigation }) => {
 
       case 'pricing':
         return isAdmin ? (
-          <View style={styles.amountSection}>
+          <View style={[styles.amountSection, { backgroundColor: colors.background }]}>
             <Text style={styles.amountSectionTitle}>Pricing</Text>
             <View style={styles.row}>
               <View style={[styles.field, { flex: 1, marginRight: 8 }]}>
-                <Text style={styles.label}>Unit Price (₹)</Text>
-                <TextInput style={styles.input} value={form.unitPrice}
+                <Text style={[styles.label, { color: colors.textPrimary }]}>Unit Price (₹)</Text>
+                <TextInput style={[styles.input, { backgroundColor: colors.surface, borderColor: colors.border, color: colors.textPrimary }]} value={form.unitPrice}
                   onChangeText={v => set('unitPrice', v)} keyboardType="numeric"
-                  placeholder="Optional" placeholderTextColor="#9CA3AF" />
+                  placeholder="Optional" placeholderTextColor={colors.textSecondary} />
               </View>
               <View style={[styles.field, { flex: 1 }]}>
-                <Text style={styles.label}>Total Amount (₹) *</Text>
-                <TextInput style={styles.input} value={form.totalAmount}
+                <Text style={[styles.label, { color: colors.textPrimary }]}>Total Amount (₹) *</Text>
+                <TextInput style={[styles.input, { backgroundColor: colors.surface, borderColor: colors.border, color: colors.textPrimary }]} value={form.totalAmount}
                   onChangeText={v => set('totalAmount', v)} keyboardType="numeric"
-                  placeholder="0" placeholderTextColor="#9CA3AF" />
+                  placeholder="0" placeholderTextColor={colors.textSecondary} />
               </View>
             </View>
             <View style={styles.field}>
-              <Text style={styles.label}>Advance Amount (₹) *</Text>
-              <TextInput style={styles.input} value={form.advanceAmount}
+              <Text style={[styles.label, { color: colors.textPrimary }]}>Advance Amount (₹) *</Text>
+              <TextInput style={[styles.input, { backgroundColor: colors.surface, borderColor: colors.border, color: colors.textPrimary }]} value={form.advanceAmount}
                 onChangeText={v => set('advanceAmount', v)} keyboardType="numeric"
-                placeholder="0" placeholderTextColor="#9CA3AF" />
+                placeholder="0" placeholderTextColor={colors.textSecondary} />
             </View>
           </View>
         ) : null;
@@ -311,10 +313,10 @@ const CreateOrderScreen = ({ navigation }) => {
       case 'driverName':
         return (
           <View style={styles.field}>
-            <Text style={styles.label}>Driver Name</Text>
-            <TextInput style={styles.input} value={form.driverName}
+            <Text style={[styles.label, { color: colors.textPrimary }]}>Driver Name</Text>
+            <TextInput style={[styles.input, { backgroundColor: colors.background, borderColor: colors.border, color: colors.textPrimary }]} value={form.driverName}
               onChangeText={v => set('driverName', v)} placeholder="Driver name"
-              placeholderTextColor="#9CA3AF" />
+              placeholderTextColor={colors.textSecondary} />
           </View>
         );
 
@@ -322,16 +324,16 @@ const CreateOrderScreen = ({ navigation }) => {
         return (
           <View style={styles.row}>
             <View style={[styles.field, { flex: 1, marginRight: 8 }]}>
-              <Text style={styles.label}>Driver Phone</Text>
-              <TextInput style={styles.input} value={form.driverPhone}
+              <Text style={[styles.label, { color: colors.textPrimary }]}>Driver Phone</Text>
+              <TextInput style={[styles.input, { backgroundColor: colors.background, borderColor: colors.border, color: colors.textPrimary }]} value={form.driverPhone}
                 onChangeText={v => set('driverPhone', v)} placeholder="Driver phone"
-                placeholderTextColor="#9CA3AF" keyboardType="phone-pad" />
+                placeholderTextColor={colors.textSecondary} keyboardType="phone-pad" />
             </View>
             <View style={[styles.field, { flex: 1 }]}>
-              <Text style={styles.label}>Vehicle Number</Text>
-              <TextInput style={styles.input} value={form.vehicleNumber}
+              <Text style={[styles.label, { color: colors.textPrimary }]}>Vehicle Number</Text>
+              <TextInput style={[styles.input, { backgroundColor: colors.background, borderColor: colors.border, color: colors.textPrimary }]} value={form.vehicleNumber}
                 onChangeText={v => set('vehicleNumber', v)} placeholder="e.g. MH12AB1234"
-                placeholderTextColor="#9CA3AF" />
+                placeholderTextColor={colors.textSecondary} />
             </View>
           </View>
         );
@@ -340,17 +342,17 @@ const CreateOrderScreen = ({ navigation }) => {
         return (
           <View style={styles.field}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-              <Text style={[styles.label, { marginBottom: 0, flex: 1 }]}>Link to Project</Text>
+              <Text style={[styles.label, { marginBottom: 0, flex: 1, color: colors.textPrimary }]}>Link to Project</Text>
               <TouchableOpacity
                 onPress={() => { setShowProjectToggle(v => !v); if (showProjectToggle) { setSelectedProject(null); setShowProjectPicker(false); } }}
-                style={[styles.toggleBtn, { flex: 0, paddingHorizontal: 16, paddingVertical: 6, marginRight: 0 }, showProjectToggle && styles.toggleBtnActive]}>
-                <Text style={[styles.toggleText, showProjectToggle && styles.toggleTextActive]}>{showProjectToggle ? 'On' : 'Off'}</Text>
+                style={[styles.toggleBtn, { flex: 0, paddingHorizontal: 16, paddingVertical: 6, marginRight: 0, backgroundColor: colors.background, borderColor: colors.border }, showProjectToggle && styles.toggleBtnActive]}>
+                <Text style={[styles.toggleText, { color: colors.textPrimary }, showProjectToggle && styles.toggleTextActive]}>{showProjectToggle ? 'On' : 'Off'}</Text>
               </TouchableOpacity>
             </View>
             {showProjectToggle ? (
               <View>
-                <TouchableOpacity style={styles.picker} onPress={() => setShowProjectPicker(v => !v)}>
-                  <Text style={selectedProject ? styles.pickerValue : styles.pickerPlaceholder}>
+                <TouchableOpacity style={[styles.picker, { backgroundColor: colors.background, borderColor: colors.border }]} onPress={() => setShowProjectPicker(v => !v)}>
+                  <Text style={selectedProject ? [styles.pickerValue, { color: colors.textPrimary }] : styles.pickerPlaceholder}>
                     {selectedProjectName || 'Select project (optional)...'}
                   </Text>
                   <FontAwesome5 name={showProjectPicker ? 'chevron-up' : 'chevron-down'} size={14} color="#6B7280" />
@@ -369,30 +371,30 @@ const CreateOrderScreen = ({ navigation }) => {
       case 'address':
         return (
           <View style={styles.field}>
-            <Text style={styles.label}>Delivery Address</Text>
-            <TextInput style={[styles.input, styles.multiline]} value={form.deliveryAddress}
+            <Text style={[styles.label, { color: colors.textPrimary }]}>Delivery Address</Text>
+            <TextInput style={[styles.input, styles.multiline, { backgroundColor: colors.background, borderColor: colors.border, color: colors.textPrimary }]} value={form.deliveryAddress}
               onChangeText={v => set('deliveryAddress', v)} placeholder="Enter delivery address"
-              placeholderTextColor="#9CA3AF" multiline numberOfLines={2} />
+              placeholderTextColor={colors.textSecondary} multiline numberOfLines={2} />
           </View>
         );
 
       case 'floor':
         return (
           <View style={styles.field}>
-            <Text style={styles.label}>Floor (optional)</Text>
-            <TextInput style={styles.input} value={form.floor}
+            <Text style={[styles.label, { color: colors.textPrimary }]}>Floor (optional)</Text>
+            <TextInput style={[styles.input, { backgroundColor: colors.background, borderColor: colors.border, color: colors.textPrimary }]} value={form.floor}
               onChangeText={v => set('floor', v)} placeholder="e.g. 2nd Floor, Ground Floor"
-              placeholderTextColor="#9CA3AF" />
+              placeholderTextColor={colors.textSecondary} />
           </View>
         );
 
       case 'notes':
         return (
           <View style={styles.field}>
-            <Text style={styles.label}>Notes</Text>
-            <TextInput style={[styles.input, styles.multiline]} value={form.notes}
+            <Text style={[styles.label, { color: colors.textPrimary }]}>Notes</Text>
+            <TextInput style={[styles.input, styles.multiline, { backgroundColor: colors.background, borderColor: colors.border, color: colors.textPrimary }]} value={form.notes}
               onChangeText={v => set('notes', v)} placeholder="Any special instructions..."
-              placeholderTextColor="#9CA3AF" multiline numberOfLines={2} />
+              placeholderTextColor={colors.textSecondary} multiline numberOfLines={2} />
           </View>
         );
 
@@ -430,7 +432,7 @@ const CreateOrderScreen = ({ navigation }) => {
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
+    <View style={{ flex: 1, backgroundColor: colors.surface }}>
       <AppHeader navigation={navigation} />
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

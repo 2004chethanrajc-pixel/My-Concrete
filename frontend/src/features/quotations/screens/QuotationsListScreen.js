@@ -20,6 +20,7 @@ import Animated, {
 import { theme, formatCurrency } from '../../../theme/theme';
 import { useScrollPosition } from '../../../hooks/useScrollPosition';
 import { useAuth } from '../../../hooks/useAuth';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   Card,
   StatusChip,
@@ -39,6 +40,7 @@ const QuotationsListScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const { scrollY, onScroll } = useScrollPosition();
+  const { colors } = useTheme();
 
   useEffect(() => {
     fetchQuotations();
@@ -179,7 +181,7 @@ const QuotationsListScreen = ({ navigation }) => {
           style={styles.cardTouchable}
         >
           <LinearGradient
-            colors={['#FFFFFF', '#F8FAFC']}
+            colors={[colors.cardBg, colors.surfaceSecondary]}
             style={styles.quotationCard}
           >
             {/* Status Badge */}
@@ -207,10 +209,10 @@ const QuotationsListScreen = ({ navigation }) => {
               </View>
               
               <View style={styles.projectInfo}>
-                <Text style={styles.projectName}>{item.project_name}</Text>
+                <Text style={[styles.projectName, { color: colors.textPrimary }]}>{item.project_name}</Text>
                 <View style={styles.locationContainer}>
                   <MaterialCommunityIcons name="map-marker" size={14} color="#94A3B8" />
-                  <Text style={styles.locationText}>{item.project_location}</Text>
+                  <Text style={[styles.locationText, { color: colors.textSecondary }]}>{item.project_location}</Text>
                 </View>
                 {/* Project Status */}
                 {item.project_status && (
@@ -229,20 +231,20 @@ const QuotationsListScreen = ({ navigation }) => {
             </View>
 
             {/* Amount and Date */}
-            <View style={styles.detailsContainer}>
+            <View style={[styles.detailsContainer, { backgroundColor: colors.sectionBg }]}>
               <View style={styles.amountContainer}>
-                <Text style={styles.amountLabel}>Total Amount</Text>
+                <Text style={[styles.amountLabel, { color: colors.textSecondary }]}>Total Amount</Text>
                 <View style={styles.amountRow}>
                   <MaterialCommunityIcons name="currency-inr" size={20} color="#3B82F6" />
-                  <Text style={styles.amountValue}>
+                  <Text style={[styles.amountValue, { color: colors.textPrimary }]}>
                     {formatCurrency(item.total_cost).replace('₹', '')}
                   </Text>
                 </View>
               </View>
 
-              <View style={styles.dateContainer}>
+              <View style={[styles.dateContainer, { backgroundColor: colors.cardBg }]}>
                 <MaterialCommunityIcons name="calendar" size={14} color="#94A3B8" />
-                <Text style={styles.dateText}>{formatDate(item.created_at)}</Text>
+                <Text style={[styles.dateText, { color: colors.textSecondary }]}>{formatDate(item.created_at)}</Text>
               </View>
             </View>
 
@@ -276,7 +278,7 @@ const QuotationsListScreen = ({ navigation }) => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
         <AppHeader navigation={navigation} />
         <LoadingState message="Loading quotations..." />
@@ -285,7 +287,7 @@ const QuotationsListScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <AppHeader navigation={navigation} />
 

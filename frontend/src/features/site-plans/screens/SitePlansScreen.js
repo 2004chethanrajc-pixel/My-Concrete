@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   View,
   Text,
@@ -17,7 +18,7 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { WebView } from 'react-native-webview';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { colors } from '../../../theme/colors';
+// import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
 import { useAuth } from '../../../hooks/useAuth';
 import { sitePlansApi } from '../api';
@@ -28,6 +29,8 @@ import { getImageUrl } from '../../../config/api.config';
 const { width, height } = Dimensions.get('window');
 
 const SitePlansScreen = ({ route, navigation }) => {
+  const { colors } = useTheme();
+  const styles = useMemo(() => getStyles(colors), [colors]);
   const { projectId, projectName } = route.params;
   const { user } = useAuth();
   const [sitePlans, setSitePlans] = useState([]);
@@ -512,7 +515,7 @@ const SitePlansScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

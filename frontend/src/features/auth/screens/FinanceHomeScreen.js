@@ -29,11 +29,13 @@ import {
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
 import { paymentsApi } from '../../payments/api';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
 const FinanceHomeScreen = ({ navigation }) => {
   const { user } = useAuth();
+  const { colors } = useTheme();
   const { projects, loading, error, refetch } = useProjects();
   const [refreshing, setRefreshing] = useState(false);
   const [pendingPaymentsCount, setPendingPaymentsCount] = useState(0);
@@ -381,7 +383,7 @@ const FinanceHomeScreen = ({ navigation }) => {
 
   if (loading && !refreshing) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
         <LoadingState message="Loading projects..." />
       </View>
@@ -389,7 +391,7 @@ const FinanceHomeScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <AppHeader navigation={navigation} />
 
@@ -432,7 +434,7 @@ const FinanceHomeScreen = ({ navigation }) => {
           {isSuperAdmin && (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Super Admin Dashboard</Text>
+                <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Super Admin Dashboard</Text>
                 <View style={styles.superAdminBadge}>
                   <MaterialIcons name="admin-panel-settings" size={14} color="#FFFFFF" />
                   <Text style={styles.superAdminBadgeText}>Super Admin</Text>
@@ -478,7 +480,7 @@ const FinanceHomeScreen = ({ navigation }) => {
               {/* Project Status Graph Section */}
               <View style={styles.graphSection}>
                 <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>Project Status Overview</Text>
+                  <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Project Status Overview</Text>
                 </View>
                 <View style={styles.graphCard}>
                   <View style={styles.graphHeader}>
@@ -518,7 +520,7 @@ const FinanceHomeScreen = ({ navigation }) => {
               {allTransactions.length > 0 && (
                 <View style={styles.section}>
                   <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Recent Transactions</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Recent Transactions</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('VerifyPayments')}>
                       <Text style={styles.seeAllText}>View All</Text>
                     </TouchableOpacity>
@@ -540,7 +542,7 @@ const FinanceHomeScreen = ({ navigation }) => {
           {/* Overview Section */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Financial Overview</Text>
+              <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Financial Overview</Text>
               <TouchableOpacity onPress={() => navigation.navigate('ProjectsList')}>
                 <Text style={styles.seeAllText}>See All</Text>
               </TouchableOpacity>
@@ -616,7 +618,7 @@ const FinanceHomeScreen = ({ navigation }) => {
               {reportSubmittedProjects.length > 0 && (
                 <View style={styles.section}>
                   <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Generate Quotations</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Generate Quotations</Text>
                     <Text style={styles.projectCount}>{reportSubmittedProjects.length} pending</Text>
                   </View>
                   {reportSubmittedProjects.map((project) => (
@@ -635,7 +637,7 @@ const FinanceHomeScreen = ({ navigation }) => {
               {projectsWithQuotations.length > 0 && (
                 <View style={styles.section}>
                   <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Projects with Quotations</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Projects with Quotations</Text>
                     <Text style={styles.projectCount}>{projectsWithQuotations.length} total</Text>
                   </View>
                   {projectsWithQuotations.map((project) => (

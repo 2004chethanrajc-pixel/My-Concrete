@@ -15,6 +15,7 @@ import { theme } from '../../../theme/theme';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
 import { Card, EmptyState } from '../../../components/common';
+import { useTheme } from '../../../context/ThemeContext';
 
 const AuditLogsScreen = ({ navigation, route }) => {
   const { role } = route.params || {};
@@ -23,6 +24,7 @@ const AuditLogsScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [showLoginLogs, setShowLoginLogs] = useState(false);
+  const { colors } = useTheme();
   
   const { logs, pagination, loading, error, refetch } = useAuditLogs(50, currentPage, !showLoginLogs);
 
@@ -132,18 +134,18 @@ const AuditLogsScreen = ({ navigation, route }) => {
             />
           </View>
           <View style={styles.actionInfo}>
-            <Text style={styles.actionText}>{formatActionText(item.action)}</Text>
-            <Text style={styles.timeText}>{formatDate(item.created_at)}</Text>
+            <Text style={[styles.actionText, { color: colors.textPrimary }]}>{formatActionText(item.action)}</Text>
+            <Text style={[styles.timeText, { color: colors.textSecondary }]}>{formatDate(item.created_at)}</Text>
           </View>
         </View>
       </View>
       
-      <Text style={styles.description}>{item.description}</Text>
+      <Text style={[styles.description, { color: colors.textPrimary }]}>{item.description}</Text>
       
-      <View style={styles.userInfo}>
+      <View style={[styles.userInfo, { borderTopColor: colors.divider }]}>
         <View style={styles.userDetails}>
-          <FontAwesome5 name="user" size={12} color={theme.colors.textSecondary} />
-          <Text style={styles.userName}>{item.performed_by_name || 'System'}</Text>
+          <FontAwesome5 name="user" size={12} color={colors.textSecondary} />
+          <Text style={[styles.userName, { color: colors.textSecondary }]}>{item.performed_by_name || 'System'}</Text>
           <View style={[styles.roleBadge, { backgroundColor: `${getActionColor(item.action)}15` }]}>
             <Text style={[styles.roleText, { color: getActionColor(item.action) }]}>
               {item.performed_by_role?.replace('_', ' ').toUpperCase() || 'SYSTEM'}
@@ -189,11 +191,11 @@ const AuditLogsScreen = ({ navigation, route }) => {
 
   if (loading && currentPage === 1) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
         <View style={styles.centerContainer}>
           <ActivityIndicator size="large" color={theme.colors.primary} />
-          <Text style={styles.loadingText}>Loading audit logs...</Text>
+          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Loading audit logs...</Text>
         </View>
       </View>
     );
@@ -201,7 +203,7 @@ const AuditLogsScreen = ({ navigation, route }) => {
 
   if (error && currentPage === 1) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
         <View style={styles.centerContainer}>
           <EmptyState
@@ -218,15 +220,15 @@ const AuditLogsScreen = ({ navigation, route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <AppHeader navigation={navigation} />
       
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
         <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>
+          <Text style={[styles.headerTitle, { color: colors.textPrimary }]}>
             {role ? `${role.replace('_', ' ').toUpperCase()} Activities` : 'All System Activities'}
           </Text>
-          <Text style={styles.headerSubtitle}>
+          <Text style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
             {filteredLogs.length} log{filteredLogs.length !== 1 ? 's' : ''} found
             {!showLoginLogs && ' (Login logs hidden)'}
           </Text>

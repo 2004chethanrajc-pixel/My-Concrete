@@ -31,9 +31,11 @@ import {
 } from '../../../components/common';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
+import { useTheme } from '../../../context/ThemeContext';
 
 const SiteHomeScreen = ({ navigation }) => {
   const { user } = useAuth();
+  const { colors } = useTheme();
   const { visits, loading, error, refetch } = useSiteVisits(user?.id);
   const { projects, loading: loadingProjects } = useProjects();
   const { rejectVisit, loading: rejectingVisit } = useRejectVisit();
@@ -295,7 +297,7 @@ const SiteHomeScreen = ({ navigation }) => {
 
   if (loading && !refreshing) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
         <LoadingState message="Loading visits..." />
       </View>
@@ -303,7 +305,7 @@ const SiteHomeScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <AppHeader navigation={navigation} />
 
@@ -344,7 +346,7 @@ const SiteHomeScreen = ({ navigation }) => {
           {/* Overview Section */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Overview</Text>
+              <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Overview</Text>
             </View>
             
             <View style={styles.statsGrid}>
@@ -402,7 +404,7 @@ const SiteHomeScreen = ({ navigation }) => {
           ) : (
             <View style={styles.section}>
               <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Scheduled Visits</Text>
+                <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Scheduled Visits</Text>
                 <Text style={styles.projectCount}>{sortedUniqueVisits.length} project{sortedUniqueVisits.length !== 1 ? 's' : ''}</Text>
               </View>
               <FlatList
