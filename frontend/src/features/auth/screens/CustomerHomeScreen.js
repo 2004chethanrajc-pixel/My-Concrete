@@ -30,11 +30,13 @@ import {
 } from '../../../components/common';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
 const CustomerHomeScreen = ({ navigation, route }) => {
   const { user } = useAuth();
+  const { colors } = useTheme();
   const { projects, loading, error, refetch } = useProjects();
   const [refreshing, setRefreshing] = useState(false);
   const [projectsWithExtraCharges, setProjectsWithExtraCharges] = useState([]);
@@ -470,7 +472,7 @@ const CustomerHomeScreen = ({ navigation, route }) => {
 
   if (loading && !refreshing) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
         <LoadingState message="Loading projects..." />
       </View>
@@ -478,7 +480,7 @@ const CustomerHomeScreen = ({ navigation, route }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <AppHeader navigation={navigation} />
 
@@ -520,7 +522,7 @@ const CustomerHomeScreen = ({ navigation, route }) => {
           {/* Stats Section - New Layout */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Overview</Text>
+              <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Overview</Text>
               <TouchableOpacity onPress={() => navigation.navigate('ProjectsList')}>
                 <Text style={styles.seeAllText}>See All</Text>
               </TouchableOpacity>
@@ -568,7 +570,7 @@ const CustomerHomeScreen = ({ navigation, route }) => {
           {/* My Projects Section */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>My Projects</Text>
+              <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>My Projects</Text>
               <TouchableOpacity onPress={() => navigation.navigate('ProjectsList')}>
                 <Text style={styles.seeAllText}>See All</Text>
               </TouchableOpacity>

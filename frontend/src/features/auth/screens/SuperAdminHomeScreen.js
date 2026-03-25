@@ -24,6 +24,7 @@ import {
 } from '../../../components/common';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
+import { useTheme } from '../../../context/ThemeContext';
 
 const SuperAdminHomeScreen = ({ navigation }) => {
   const { user } = useAuth();
@@ -31,6 +32,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
   const { projects, loading: projectsLoading, refetch: refetchProjects } = useProjects();
   const { scrollY, onScroll } = useScrollPosition();
   const [refreshing, setRefreshing] = useState(false);
+  const { colors } = useTheme();
 
   const adminCount = users.filter((u) => u.role === 'admin' && u.is_active).length;
   const superAdminCount = users.filter((u) => u.role === 'super_admin' && u.is_active).length;
@@ -56,7 +58,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
 
   if (usersLoading || projectsLoading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
         <LoadingState message="Loading dashboard..." />
       </View>
@@ -64,7 +66,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <AppHeader navigation={navigation} />
 
       <Animated.ScrollView 
@@ -102,8 +104,8 @@ const SuperAdminHomeScreen = ({ navigation }) => {
 
         <View style={styles.content}>
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>User Management</Text>
-            <Text style={styles.sectionSubtitle}>Active users by role • Deactivated users managed separately</Text>
+            <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>User Management</Text>
+            <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Active users by role • Deactivated users managed separately</Text>
             
             <View style={styles.actionButtonsGrid}>
               <PrimaryButton
@@ -128,6 +130,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
                 value={superAdminCount}
                 icon="user-cog"
                 color={theme.colors.error}
+                colors={colors}
                 onPress={() => navigation.navigate('UsersList', { role: 'super_admin', activeOnly: true })}
               />
               <StatCard
@@ -135,6 +138,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
                 value={adminCount}
                 icon="user-shield"
                 color={theme.colors.primary}
+                colors={colors}
                 onPress={() => navigation.navigate('UsersList', { role: 'admin', activeOnly: true })}
               />
               <StatCard
@@ -142,6 +146,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
                 value={projectManagerCount}
                 icon="user-tie"
                 color={theme.colors.info}
+                colors={colors}
                 onPress={() => navigation.navigate('UsersList', { role: 'project_manager', activeOnly: true })}
               />
               <StatCard
@@ -149,6 +154,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
                 value={siteInchargeCount}
                 icon="hard-hat"
                 color={theme.colors.warning}
+                colors={colors}
                 onPress={() => navigation.navigate('UsersList', { role: 'site_incharge', activeOnly: true })}
               />
               <StatCard
@@ -156,6 +162,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
                 value={financeCount}
                 icon="rupee-sign"
                 color={theme.colors.success}
+                colors={colors}
                 onPress={() => navigation.navigate('UsersList', { role: 'finance', activeOnly: true })}
               />
               <StatCard
@@ -163,6 +170,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
                 value={customerCount}
                 icon="user-friends"
                 color={theme.colors.cardPurple}
+                colors={colors}
                 onPress={() => navigation.navigate('UsersList', { role: 'customer', activeOnly: true })}
               />
               <StatCard
@@ -170,6 +178,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
                 value={deactivatedCount}
                 icon="user-slash"
                 color={theme.colors.textSecondary}
+                colors={colors}
                 onPress={() => navigation.navigate('UsersList', { inactiveOnly: true })}
               />
             </View>
@@ -177,7 +186,7 @@ const SuperAdminHomeScreen = ({ navigation }) => {
 
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>System Activity Logs</Text>
+              <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>System Activity Logs</Text>
               <TouchableOpacity 
                 style={styles.viewAllButton}
                 onPress={() => navigation.navigate('AuditLogs')}
@@ -211,32 +220,37 @@ const SuperAdminHomeScreen = ({ navigation }) => {
               <ActivityCard
                 title="Admin Activities"
                 icon="user-shield"
+                colors={colors}
                 onPress={() => navigation.navigate('AuditLogs', { role: 'admin' })}
               />
               <ActivityCard
                 title="PM Activities"
                 icon="user-tie"
+                colors={colors}
                 onPress={() => navigation.navigate('AuditLogs', { role: 'project_manager' })}
               />
               <ActivityCard
                 title="Site Incharge Activities"
                 icon="hard-hat"
+                colors={colors}
                 onPress={() => navigation.navigate('AuditLogs', { role: 'site_incharge' })}
               />
               <ActivityCard
                 title="Finance Activities"
                 icon="rupee-sign"
+                colors={colors}
                 onPress={() => navigation.navigate('AuditLogs', { role: 'finance' })}
               />
               <ActivityCard
                 title="Customer Activities"
                 icon="user-friends"
+                colors={colors}
                 onPress={() => navigation.navigate('AuditLogs', { role: 'customer' })}
               />
             </View>
           </View>
           <View style={[styles.section, { marginBottom: 16 }]}>
-            <Text style={styles.sectionTitle}>Orders</Text>
+            <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Orders</Text>
             <TouchableOpacity 
               style={styles.allLogsButton}
               onPress={() => navigation.navigate('OrdersList')}
@@ -264,25 +278,25 @@ const SuperAdminHomeScreen = ({ navigation }) => {
   );
 };
 
-const StatCard = ({ title, value, icon, color, onPress }) => (
+const StatCard = ({ title, value, icon, color, onPress, colors }) => (
   <Card variant="elevated" onPress={onPress} style={styles.statCard}>
     <View style={[styles.statIconContainer, { backgroundColor: `${color}15` }]}>
       <FontAwesome5 name={icon} size={20} color={color} />
     </View>
-    <Text style={styles.statValue}>{value}</Text>
-    <Text style={styles.statTitle}>{title}</Text>
+    <Text style={[styles.statValue, { color: colors ? colors.textPrimary : theme.colors.textPrimary }]}>{value}</Text>
+    <Text style={[styles.statTitle, { color: colors ? colors.textSecondary : theme.colors.textSecondary }]}>{title}</Text>
   </Card>
 );
 
-const ActivityCard = ({ title, icon, onPress }) => (
+const ActivityCard = ({ title, icon, onPress, colors }) => (
   <Card variant="flat" onPress={onPress} style={styles.activityCard}>
     <View style={styles.activityContent}>
       <View style={styles.activityIconContainer}>
         <FontAwesome5 name={icon} size={20} color={theme.colors.primary} />
       </View>
-      <Text style={styles.activityTitle}>{title}</Text>
+      <Text style={[styles.activityTitle, { color: colors ? colors.textPrimary : theme.colors.textPrimary }]}>{title}</Text>
     </View>
-    <FontAwesome5 name="chevron-right" size={14} color={theme.colors.textSecondary} />
+    <FontAwesome5 name="chevron-right" size={14} color={colors ? colors.textSecondary : theme.colors.textSecondary} />
   </Card>
 );
 

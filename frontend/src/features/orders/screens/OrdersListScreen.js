@@ -12,6 +12,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { getLogoBase64, getPdfTimestamp, pdfStyles } from '../../../utils/pdfUtils';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
+import { useTheme } from '../../../context/ThemeContext';
 
 const STATUS_COLORS = {
   placed:     { bg: '#EFF6FF', text: '#2563EB' },
@@ -22,31 +23,31 @@ const STATUS_COLORS = {
   cancelled:  { bg: '#FEF2F2', text: '#DC2626' },
 };
 
-const OrderCard = ({ order, onPress }) => {
+const OrderCard = ({ order, onPress, colors }) => {
   const sc = STATUS_COLORS[order.status] || { bg: '#F3F4F6', text: '#6B7280' };
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity style={[styles.card, { backgroundColor: colors.cardBg }]} onPress={onPress} activeOpacity={0.7}>
       <View style={styles.cardHeader}>
-        <Text style={styles.orderNumber}>{order.order_number}</Text>
+        <Text style={[styles.orderNumber, { color: colors.textPrimary }]}>{order.order_number}</Text>
         <View style={[styles.statusBadge, { backgroundColor: sc.bg }]}>
           <Text style={[styles.statusText, { color: sc.text }]}>
             {order.status.toUpperCase()}
           </Text>
         </View>
       </View>
-      <Text style={styles.productType}>
+      <Text style={[styles.productType, { color: colors.textPrimary }]}>
         {order.product_type === 'concrete' ? '🏗️ Concrete' : '🧱 Bricks'}
         {order.quantity ? `  •  ${order.quantity} ${order.unit || 'units'}` : ''}
       </Text>
       {order.customer_name ? (
-        <Text style={styles.meta}>Customer: {order.customer_name}</Text>
+        <Text style={[styles.meta, { color: colors.subText }]}>Customer: {order.customer_name}</Text>
       ) : null}
       {order.total_amount ? (
         <Text style={styles.amount}>₹{Number(order.total_amount).toLocaleString()}</Text>
       ) : (
         <Text style={styles.amountPending}>Amount: Pending</Text>
       )}
-      <Text style={styles.date}>{new Date(order.created_at).toLocaleDateString('en-IN')}</Text>
+      <Text style={[styles.date, { color: colors.textLight }]}>{new Date(order.created_at).toLocaleDateString('en-IN')}</Text>
     </TouchableOpacity>
   );
 };
@@ -59,6 +60,7 @@ const OrdersListScreen = ({ navigation, route }) => {
   const [showExportMenu, setShowExportMenu] = useState(false);
   const exportButtonRef = useRef(null);
   const [menuPosition, setMenuPosition] = useState({ top: 0, right: 0 });
+  const { colors } = useTheme();
 
   const projectId = route?.params?.projectId || null;
   const projectName = route?.params?.projectName || null;
@@ -179,19 +181,19 @@ const OrdersListScreen = ({ navigation, route }) => {
   const canCreate = ['admin', 'super_admin', 'customer'].includes(user?.role);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <AppHeader navigation={navigation} />
-      <View style={styles.toolbar}>
+      <View style={[styles.toolbar, { backgroundColor: colors.toolbarBg, borderBottomColor: colors.border }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
           {projectId ? (
             <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 10, padding: 4 }}>
-              <MaterialIcons name="arrow-back" size={22} color="#1F2937" />
+              <MaterialIcons name="arrow-back" size={22} color={colors.textPrimary} />
             </TouchableOpacity>
           ) : null}
           <View style={{ flex: 1 }}>
-            <Text style={styles.title}>{projectId ? 'Orders' : 'Orders'}</Text>
+            <Text style={[styles.title, { color: colors.textPrimary }]}>{projectId ? 'Orders' : 'Orders'}</Text>
             {projectId && projectName ? (
-              <Text style={{ fontSize: 12, color: '#6B7280', marginTop: 1 }} numberOfLines={1}>{projectName}</Text>
+              <Text style={{ fontSize: 12, color: colors.subText, marginTop: 1 }} numberOfLines={1}>{projectName}</Text>
             ) : null}
           </View>
         </View>
@@ -230,7 +232,7 @@ const OrdersListScreen = ({ navigation, route }) => {
           activeOpacity={1} 
           onPress={() => setShowExportMenu(false)}
         >
-          <View style={[styles.exportMenuHorizontal, { position: 'absolute', top: menuPosition.top, right: 20 }]}>
+          <View style={[styles.exportMenuHorizontal, { position: 'absolute', top: menuPosition.top, right: 20, backgroundColor: colors.surface, borderColor: colors.border }]}>
             <TouchableOpacity style={styles.exportItemHorizontal} onPress={downloadPdf}>
               <FontAwesome5 name="file-pdf" size={18} color="#DC2626" />
               <Text style={[styles.exportItemTextHorizontal, { color: '#DC2626' }]}>PDF</Text>
@@ -265,6 +267,7 @@ const OrdersListScreen = ({ navigation, route }) => {
           renderItem={({ item }) => (
             <OrderCard
               order={item}
+              colors={colors}
               onPress={() => navigation.navigate('OrderDetail', { orderId: item.id })}
             />
           )}

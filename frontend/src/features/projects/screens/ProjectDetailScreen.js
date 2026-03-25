@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -22,7 +22,7 @@ import * as FileSystem from 'expo-file-system';
 import { FontAwesome5, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors } from '../../../theme/colors';
+// removed static colors import
 import { typography } from '../../../theme/typography';
 import { useAuth } from '../../../hooks/useAuth';
 import { useAssignPM, useAssignSite, useAssignFinance } from '../hooks';
@@ -44,6 +44,7 @@ import BottomNavigation from '../../../components/common/BottomNavigation';
 import { makeCall, sendEmail } from '../../../utils/contactUtils';
 import NetInfo from '@react-native-community/netinfo';
 import { enqueueWorklog, enqueueWorklogImages } from '../../../services/offlineQueue';
+import { useTheme } from '../../../context/ThemeContext';
 
 const isVideoFile = (path) => /\.(mp4|mov|avi|mkv|webm|3gp)$/i.test(path);
 
@@ -66,6 +67,8 @@ const FLOOR_STATUS_TRANSITIONS = {
 const { width } = Dimensions.get('window');
 
 const ProjectDetailScreen = ({ route, navigation }) => {
+  const { colors } = useTheme();
+  const styles = useMemo(() => getStyles(colors), [colors]);
   const { project: initialProject } = route.params;
   const [project, setProject] = useState(initialProject);
   const [showPMModal, setShowPMModal] = useState(false);
@@ -3171,7 +3174,7 @@ const ProjectDetailScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

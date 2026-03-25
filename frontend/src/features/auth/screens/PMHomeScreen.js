@@ -6,6 +6,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { useProjects } from '../../projects/hooks';
 import { useScrollPosition } from '../../../hooks/useScrollPosition';
 import { theme } from '../../../theme/theme';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   PrimaryButton,
   SecondaryButton,
@@ -20,6 +21,7 @@ const PMHomeScreen = ({ navigation }) => {
   const { user } = useAuth();
   const { projects, loading, error } = useProjects();
   const { scrollY, onScroll } = useScrollPosition();
+  const { colors } = useTheme();
 
   const totalProjects = projects.length;
   const activeProjects = projects.filter(p => 
@@ -42,7 +44,7 @@ const PMHomeScreen = ({ navigation }) => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
         <LoadingState message="Loading projects..." />
       </View>
@@ -50,7 +52,7 @@ const PMHomeScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <AppHeader navigation={navigation} />
 
@@ -86,7 +88,7 @@ const PMHomeScreen = ({ navigation }) => {
         <View style={styles.content}>
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Overview</Text>
+              <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Overview</Text>
               <TouchableOpacity onPress={() => navigation.navigate('ProjectsList')}>
                 <Text style={styles.seeAllText}>See All</Text>
               </TouchableOpacity>
@@ -141,8 +143,8 @@ const PMHomeScreen = ({ navigation }) => {
               {projectsWithQuotations.length > 0 && (
                 <View style={styles.section}>
                   <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Projects with Quotations</Text>
-                    <Text style={styles.projectCount}>{projectsWithQuotations.length} total</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Projects with Quotations</Text>
+                    <Text style={[styles.projectCount, { color: colors.textSecondary }]}>{projectsWithQuotations.length} total</Text>
                   </View>
                   {projectsWithQuotations.map((project) => (
                     <ProjectCard
@@ -166,8 +168,8 @@ const PMHomeScreen = ({ navigation }) => {
               {otherProjects.length > 0 && (
                 <View style={styles.section}>
                   <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Other Projects</Text>
-                    <Text style={styles.projectCount}>{otherProjects.length} total</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.textPrimary }]}>Other Projects</Text>
+                    <Text style={[styles.projectCount, { color: colors.textSecondary }]}>{otherProjects.length} total</Text>
                   </View>
                   {otherProjects.map((project) => (
                     <ProjectCard

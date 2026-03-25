@@ -22,6 +22,7 @@ import { reportsApi } from '../api';
 import { theme } from '../../../theme/theme';
 import { useScrollPosition } from '../../../hooks/useScrollPosition';
 import { useAuth } from '../../../hooks/useAuth';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   Card,
   StatusChip,
@@ -40,6 +41,7 @@ const ReportsListScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const { scrollY, onScroll } = useScrollPosition();
   const { user } = useAuth();
+  const { colors } = useTheme();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -140,10 +142,10 @@ const ReportsListScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => handleViewReport(item)}
           activeOpacity={0.7}
-          style={styles.cardTouchable}
+          style={[styles.cardTouchable, { backgroundColor: colors.cardBg }]}
         >
           <LinearGradient
-            colors={['#FFFFFF', '#F9FAFB']}
+            colors={[colors.cardBg, colors.surfaceSecondary]}
             style={styles.reportCard}
           >
             {/* Status Badge */}
@@ -166,12 +168,12 @@ const ReportsListScreen = ({ navigation }) => {
               </View>
               
               <View style={styles.projectInfo}>
-                <Text style={styles.projectName} numberOfLines={1}>
+                <Text style={[styles.projectName, { color: colors.textPrimary }]} numberOfLines={1}>
                   {item.project_name}
                 </Text>
                 <View style={styles.metaRow}>
-                  <MaterialCommunityIcons name="calendar" size={14} color="#6B7280" />
-                  <Text style={styles.metaText}>{formatDate(item.created_at)}</Text>
+                  <MaterialCommunityIcons name="calendar" size={14} color={colors.textSecondary} />
+                  <Text style={[styles.metaText, { color: colors.textSecondary }]}>{formatDate(item.created_at)}</Text>
                 </View>
               </View>
             </View>
@@ -179,23 +181,23 @@ const ReportsListScreen = ({ navigation }) => {
             {/* Additional Info Chips */}
             <View style={styles.chipsContainer}>
               {item.pm_name && (
-                <View style={styles.chip}>
+                <View style={[styles.chip, { backgroundColor: colors.sectionBg }]}>
                   <MaterialCommunityIcons name="account-tie" size={12} color="#3B82F6" />
-                  <Text style={styles.chipText}>{item.pm_name}</Text>
+                  <Text style={[styles.chipText, { color: colors.textSecondary }]}>{item.pm_name}</Text>
                 </View>
               )}
               
               {item.total_floors && (
-                <View style={styles.chip}>
+                <View style={[styles.chip, { backgroundColor: colors.sectionBg }]}>
                   <MaterialCommunityIcons name="layers" size={12} color="#3B82F6" />
-                  <Text style={styles.chipText}>{item.total_floors} floors</Text>
+                  <Text style={[styles.chipText, { color: colors.textSecondary }]}>{item.total_floors} floors</Text>
                 </View>
               )}
 
               {item.images?.length > 0 && (
-                <View style={styles.chip}>
+                <View style={[styles.chip, { backgroundColor: colors.sectionBg }]}>
                   <MaterialCommunityIcons name="image" size={12} color="#3B82F6" />
-                  <Text style={styles.chipText}>{item.images.length} images</Text>
+                  <Text style={[styles.chipText, { color: colors.textSecondary }]}>{item.images.length} images</Text>
                 </View>
               )}
             </View>
@@ -207,29 +209,29 @@ const ReportsListScreen = ({ navigation }) => {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
         <AppHeader navigation={navigation} />
-        <View style={styles.loadingContainer}>
+        <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
           <ActivityIndicator size="large" color="#3B82F6" />
-          <Text style={styles.loadingText}>Loading reports...</Text>
+          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Loading reports...</Text>
         </View>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <AppHeader navigation={navigation} />
 
       {/* Simple Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
         <View>
-          <Text style={styles.headerTitle}>
+          <Text style={[styles.headerTitle, { color: colors.textPrimary }]}>
             {user?.role === 'site_incharge' ? 'My Reports' : 'Reports'}
           </Text>
-          <Text style={styles.headerSubtitle}>
+          <Text style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
             {reports.length} {reports.length === 1 ? 'report' : 'reports'} 
             {user?.role === 'site_incharge' ? ' created by you' : ' available'}
           </Text>

@@ -15,6 +15,7 @@ import { getLogoBase64, getPdfTimestamp, pdfStyles } from '../../../utils/pdfUti
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
 import { makeCall, sendEmail } from '../../../utils/contactUtils';
+import { useTheme } from '../../../context/ThemeContext';
 
 const STATUS_COLORS = {
   pending_approval: { bg: '#FFF7ED', text: '#EA580C' },
@@ -28,24 +29,24 @@ const STATUS_COLORS = {
 
 const STATUS_FLOW = ['pending_approval', 'placed', 'assigned', 'dispatched', 'delivered', 'invoiced'];
 
-const Row = ({ label, value, valueStyle }) => (
-  <View style={styles.row}>
-    <Text style={styles.rowLabel}>{label}</Text>
-    <Text style={[styles.rowValue, valueStyle]}>{value || '-'}</Text>
+const Row = ({ label, value, valueStyle, themeColors }) => (
+  <View style={[styles.row, themeColors && { borderBottomColor: themeColors.divider }]}>
+    <Text style={[styles.rowLabel, themeColors && { color: themeColors.textSecondary }]}>{label}</Text>
+    <Text style={[styles.rowValue, themeColors && { color: themeColors.textPrimary }, valueStyle]}>{value || '-'}</Text>
   </View>
 );
 
-const ContactRow = ({ label, value, onPress }) => (
-  <View style={styles.row}>
-    <Text style={styles.rowLabel}>{label}</Text>
+const ContactRow = ({ label, value, onPress, themeColors }) => (
+  <View style={[styles.row, themeColors && { borderBottomColor: themeColors.divider }]}>
+    <Text style={[styles.rowLabel, themeColors && { color: themeColors.textSecondary }]}>{label}</Text>
     <TouchableOpacity onPress={onPress} disabled={!value || value === '-'}>
-      <Text style={[styles.rowValue, value && value !== '-' && styles.linkValue]}>{value || '-'}</Text>
+      <Text style={[styles.rowValue, themeColors && { color: themeColors.textPrimary }, value && value !== '-' && styles.linkValue]}>{value || '-'}</Text>
     </TouchableOpacity>
   </View>
 );
 
 // New component for clickable driver phone
-const ClickablePhoneRow = ({ label, value }) => {
+const ClickablePhoneRow = ({ label, value, themeColors }) => {
   const handleCall = () => {
     if (!value || value === '-') return;
     
@@ -67,10 +68,10 @@ const ClickablePhoneRow = ({ label, value }) => {
   };
 
   return (
-    <View style={styles.row}>
-      <Text style={styles.rowLabel}>{label}</Text>
+    <View style={[styles.row, themeColors && { borderBottomColor: themeColors.divider }]}>
+      <Text style={[styles.rowLabel, themeColors && { color: themeColors.textSecondary }]}>{label}</Text>
       <TouchableOpacity onPress={handleCall} disabled={!value || value === '-'}>
-        <Text style={[styles.rowValue, value && value !== '-' && styles.callLinkValue]}>
+        <Text style={[styles.rowValue, themeColors && { color: themeColors.textPrimary }, value && value !== '-' && styles.callLinkValue]}>
           {value || '-'}
         </Text>
       </TouchableOpacity>
@@ -116,6 +117,7 @@ const OrderDetailScreen = ({ route, navigation }) => {
   const isCustomer = user?.role === 'customer';
   const isFinance = user?.role === 'finance';
   const isPM = user?.role === 'project_manager';
+  const { colors: themeColors } = useTheme();
 
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [approveForm, setApproveForm] = useState({ unitPrice: '', totalAmount: '', advanceAmount: '' });
@@ -303,13 +305,13 @@ const OrderDetailScreen = ({ route, navigation }) => {
   const canPayBalance = isCustomer && order.advance_paid && !order.balance_paid && order.total_amount && order.status !== 'cancelled';
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <AppHeader navigation={navigation} />
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: themeColors.surface, borderBottomColor: themeColors.border }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <MaterialIcons name="arrow-back" size={24} color="#1F2937" />
+          <MaterialIcons name="arrow-back" size={24} color={themeColors.textPrimary} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{order.order_number}</Text>
+        <Text style={[styles.headerTitle, { color: themeColors.textPrimary }]}>{order.order_number}</Text>
         <TouchableOpacity onPress={downloadPdf} disabled={pdfLoading}>
           {pdfLoading
             ? <ActivityIndicator size="small" color="#2563EB" />
@@ -329,73 +331,77 @@ const OrderDetailScreen = ({ route, navigation }) => {
         </View>
 
         {/* Order Info */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Order Details</Text>
-          <Row label="Product" value={order.product_type === 'concrete' ? '🏗️ Concrete' : '🧱 Bricks'} />
-          <Row label="Description" value={order.product_description} />
-          <Row label="Quantity" value={`${order.quantity} ${order.unit || ''}`} />
-          <Row label="Delivery Address" value={order.delivery_address} />
-          {order.floor ? <Row label="Floor" value={order.floor} /> : null}
-          {order.driver_name ? <Row label="Driver Name" value={order.driver_name} /> : null}
+        <View style={[styles.section, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}>
+          <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Order Details</Text>
+          <Row label="Product" value={order.product_type === 'concrete' ? '🏗️ Concrete' : '🧱 Bricks'} themeColors={themeColors} />
+          <Row label="Description" value={order.product_description} themeColors={themeColors} />
+          <Row label="Quantity" value={`${order.quantity} ${order.unit || ''}`} themeColors={themeColors} />
+          <Row label="Delivery Address" value={order.delivery_address} themeColors={themeColors} />
+          {order.floor ? <Row label="Floor" value={order.floor} themeColors={themeColors} /> : null}
+          {order.driver_name ? <Row label="Driver Name" value={order.driver_name} themeColors={themeColors} /> : null}
           {/* Replace the driver phone row with clickable version */}
           {order.driver_phone ? (
-            <ClickablePhoneRow label="Driver Phone" value={order.driver_phone} />
+            <ClickablePhoneRow label="Driver Phone" value={order.driver_phone} themeColors={themeColors} />
           ) : null}
-          {order.vehicle_number ? <Row label="Vehicle Number" value={order.vehicle_number} /> : null}
-          {order.project_name ? <Row label="Project" value={order.project_name} /> : null}
-          <Row label="Notes" value={order.notes} />
+          {order.vehicle_number ? <Row label="Vehicle Number" value={order.vehicle_number} themeColors={themeColors} /> : null}
+          {order.project_name ? <Row label="Project" value={order.project_name} themeColors={themeColors} /> : null}
+          <Row label="Notes" value={order.notes} themeColors={themeColors} />
         </View>
 
         {/* Customer Info */}
         {isAdmin ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Customer</Text>
-            <Row label="Name" value={order.customer_name} />
-            <ContactRow label="Email" value={order.customer_email} onPress={() => sendEmail(order.customer_email)} />
-            <ContactRow label="Phone" value={order.customer_phone} onPress={() => makeCall(order.customer_phone)} />
+          <View style={[styles.section, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}>
+            <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Customer</Text>
+            <Row label="Name" value={order.customer_name} themeColors={themeColors} />
+            <ContactRow label="Email" value={order.customer_email} onPress={() => sendEmail(order.customer_email)} themeColors={themeColors} />
+            <ContactRow label="Phone" value={order.customer_phone} onPress={() => makeCall(order.customer_phone)} themeColors={themeColors} />
             {order.assigned_finance_name ? (
-              <Row label="Assigned Finance" value={order.assigned_finance_name} />
+              <Row label="Assigned Finance" value={order.assigned_finance_name} themeColors={themeColors} />
             ) : null}
             {order.assigned_pm_name ? (
-              <Row label="Assigned PM" value={order.assigned_pm_name} />
+              <Row label="Assigned PM" value={order.assigned_pm_name} themeColors={themeColors} />
             ) : null}
           </View>
         ) : null}
 
         {/* Payment Info */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Payment</Text>
-          <Row label="Unit Price" value={order.unit_price ? `₹${Number(order.unit_price).toLocaleString()}` : 'Pending'} />
-          <Row label="Total Amount" value={order.total_amount ? `₹${Number(order.total_amount).toLocaleString()}` : 'Pending'} />
-          <Row label="Advance Amount" value={order.advance_amount ? `₹${Number(order.advance_amount).toLocaleString()}` : 'Pending'} />
+        <View style={[styles.section, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}>
+          <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Payment</Text>
+          <Row label="Unit Price" value={order.unit_price ? `₹${Number(order.unit_price).toLocaleString()}` : 'Pending'} themeColors={themeColors} />
+          <Row label="Total Amount" value={order.total_amount ? `₹${Number(order.total_amount).toLocaleString()}` : 'Pending'} themeColors={themeColors} />
+          <Row label="Advance Amount" value={order.advance_amount ? `₹${Number(order.advance_amount).toLocaleString()}` : 'Pending'} themeColors={themeColors} />
           <Row
             label="Advance Paid"
             value={order.advance_paid ? ('Paid - ' + (order.advance_payment_method || '')) : 'Not paid'}
             valueStyle={{ color: order.advance_paid ? '#16A34A' : '#DC2626' }}
+            themeColors={themeColors}
           />
           <Row
             label="Advance Verified"
             value={order.advance_verified ? 'Verified by Finance' : (order.advance_paid ? 'Pending verification' : '-')}
             valueStyle={{ color: order.advance_verified ? '#16A34A' : '#F59E0B' }}
+            themeColors={themeColors}
           />
           <Row
             label="Balance Paid"
             value={order.balance_paid ? ('Paid - ' + (order.balance_payment_method || '')) : 'Not paid'}
             valueStyle={{ color: order.balance_paid ? '#16A34A' : '#DC2626' }}
+            themeColors={themeColors}
           />
           <Row
             label="Balance Verified"
             value={order.balance_verified ? 'Verified by Finance' : (order.balance_paid ? 'Pending verification' : '-')}
             valueStyle={{ color: order.balance_verified ? '#16A34A' : '#F59E0B' }}
+            themeColors={themeColors}
           />
         </View>
 
         {/* Finance: assigned info */}
         {isFinance && order.assigned_finance_name ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Assignment</Text>
-            <Row label="Assigned Finance" value={order.assigned_finance_name} />
-            <Row label="Customer" value={order.customer_name} />
+          <View style={[styles.section, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}>
+            <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Assignment</Text>
+            <Row label="Assigned Finance" value={order.assigned_finance_name} themeColors={themeColors} />
+            <Row label="Customer" value={order.customer_name} themeColors={themeColors} />
           </View>
         ) : null}
 
@@ -529,20 +535,20 @@ const OrderDetailScreen = ({ route, navigation }) => {
       {/* Approve Modal */}
       <Modal visible={showApproveModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Approve Order</Text>
-            <Text style={styles.inputLabel}>Unit Price (₹) - Optional</Text>
-            <TextInput style={styles.modalInput} value={approveForm.unitPrice}
+          <View style={[styles.modalContent, { backgroundColor: themeColors.modalBg }]}>
+            <Text style={[styles.modalTitle, { color: themeColors.textPrimary }]}>Approve Order</Text>
+            <Text style={[styles.inputLabel, { color: themeColors.textSecondary }]}>Unit Price (₹) - Optional</Text>
+            <TextInput style={[styles.modalInput, { backgroundColor: themeColors.inputBg, color: themeColors.textPrimary, borderColor: themeColors.border }]} value={approveForm.unitPrice}
               onChangeText={v => setApproveForm(f => ({ ...f, unitPrice: v }))}
-              keyboardType="numeric" placeholder="Enter unit price" placeholderTextColor="#9CA3AF" />
-            <Text style={styles.inputLabel}>Total Amount (₹) *</Text>
-            <TextInput style={styles.modalInput} value={approveForm.totalAmount}
+              keyboardType="numeric" placeholder="Enter unit price" placeholderTextColor={themeColors.placeholderText} />
+            <Text style={[styles.inputLabel, { color: themeColors.textSecondary }]}>Total Amount (₹) *</Text>
+            <TextInput style={[styles.modalInput, { backgroundColor: themeColors.inputBg, color: themeColors.textPrimary, borderColor: themeColors.border }]} value={approveForm.totalAmount}
               onChangeText={v => setApproveForm(f => ({ ...f, totalAmount: v }))}
-              keyboardType="numeric" placeholder="Enter total amount" placeholderTextColor="#9CA3AF" />
-            <Text style={styles.inputLabel}>Advance Amount (₹) *</Text>
-            <TextInput style={styles.modalInput} value={approveForm.advanceAmount}
+              keyboardType="numeric" placeholder="Enter total amount" placeholderTextColor={themeColors.placeholderText} />
+            <Text style={[styles.inputLabel, { color: themeColors.textSecondary }]}>Advance Amount (₹) *</Text>
+            <TextInput style={[styles.modalInput, { backgroundColor: themeColors.inputBg, color: themeColors.textPrimary, borderColor: themeColors.border }]} value={approveForm.advanceAmount}
               onChangeText={v => setApproveForm(f => ({ ...f, advanceAmount: v }))}
-              keyboardType="numeric" placeholder="Enter advance amount" placeholderTextColor="#9CA3AF" />
+              keyboardType="numeric" placeholder="Enter advance amount" placeholderTextColor={themeColors.placeholderText} />
             <View style={styles.modalActions}>
               <TouchableOpacity style={styles.modalCancel} onPress={() => setShowApproveModal(false)}>
                 <Text style={styles.modalCancelText}>Cancel</Text>
@@ -561,8 +567,8 @@ const OrderDetailScreen = ({ route, navigation }) => {
       {/* Update Modal */}
       <Modal visible={showUpdateModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
-          <ScrollView style={styles.modalContent} contentContainerStyle={{ paddingBottom: 36 }}>
-            <Text style={styles.modalTitle}>Update Order</Text>
+          <ScrollView style={[styles.modalContent, { backgroundColor: themeColors.modalBg }]} contentContainerStyle={{ paddingBottom: 36 }}>
+            <Text style={[styles.modalTitle, { color: themeColors.textPrimary }]}>Update Order</Text>
 
             {/* Customer picker */}
             <Text style={styles.inputLabel}>Customer</Text>
@@ -746,8 +752,8 @@ const OrderDetailScreen = ({ route, navigation }) => {
       {/* PM Status Update Modal */}
       <Modal visible={showPMModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
-          <ScrollView style={styles.modalContent} contentContainerStyle={{ paddingBottom: 36 }}>
-            <Text style={styles.modalTitle}>Update Order Status</Text>
+          <ScrollView style={[styles.modalContent, { backgroundColor: themeColors.modalBg }]} contentContainerStyle={{ paddingBottom: 36 }}>
+            <Text style={[styles.modalTitle, { color: themeColors.textPrimary }]}>Update Order Status</Text>
             <Text style={styles.inputLabel}>Select New Status</Text>
             <View style={styles.statusOptions}>
               {nextStatuses.concat(['cancelled']).map(s => (

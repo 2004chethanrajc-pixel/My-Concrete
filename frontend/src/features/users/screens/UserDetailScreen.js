@@ -6,9 +6,11 @@ import { EmptyState } from '../../../components/common';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
 import { makeCall, sendEmail } from '../../../utils/contactUtils';
+import { useTheme } from '../../../context/ThemeContext';
 
 const UserDetailScreen = ({ route, navigation }) => {
   const { user } = route.params || {};
+  const { colors } = useTheme();
 
   // Handle case where user is not provided
   if (!user) {
@@ -26,10 +28,10 @@ const UserDetailScreen = ({ route, navigation }) => {
   }
 
   const DetailRow = ({ label, value, valueColor, onPress }) => (
-    <TouchableOpacity style={styles.detailRow} onPress={onPress} disabled={!onPress} activeOpacity={onPress ? 0.6 : 1}>
-      <Text style={styles.label}>{label}</Text>
+    <TouchableOpacity style={[styles.detailRow, { borderBottomColor: colors.border }]} onPress={onPress} disabled={!onPress} activeOpacity={onPress ? 0.6 : 1}>
+      <Text style={[styles.label, { color: colors.textSecondary }]}>{label}</Text>
       <View style={styles.valueRow}>
-        <Text style={[styles.value, valueColor && { color: valueColor }, onPress && styles.linkValue]}>
+        <Text style={[styles.value, { color: colors.textPrimary }, valueColor && { color: valueColor }, onPress && styles.linkValue]}>
           {value || 'N/A'}
         </Text>
         {onPress ? <FontAwesome5 name={label === 'Phone' ? 'phone' : 'envelope'} size={13} color={theme.colors.primary} style={{ marginLeft: 6 }} /> : null}
@@ -38,12 +40,12 @@ const UserDetailScreen = ({ route, navigation }) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <AppHeader navigation={navigation} />
       
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>User Information</Text>
+        <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <Text style={[styles.cardTitle, { color: colors.textPrimary, borderBottomColor: colors.border }]}>User Information</Text>
           
           <DetailRow label="Name" value={user.name} />
           <DetailRow label="Email" value={user.email} onPress={user.email ? () => sendEmail(user.email) : null} />

@@ -27,8 +27,10 @@ import BottomNavigation from '../../../components/common/BottomNavigation';
 import ViewShot from 'react-native-view-shot';
 import NetInfo from '@react-native-community/netinfo';
 import { enqueueReport } from '../../../services/offlineQueue';
+import { useTheme } from '../../../context/ThemeContext';
 
 const SubmitReportScreen = ({ route, navigation }) => {
+  const { colors: themeColors } = useTheme();
   const { project } = route.params;
   const [totalFloors, setTotalFloors] = useState('');
   const [dimensions, setDimensions] = useState('');
@@ -445,8 +447,8 @@ const SubmitReportScreen = ({ route, navigation }) => {
   const displaySize = getDisplaySize();
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+      <StatusBar barStyle={themeColors.background === '#121212' ? 'light-content' : 'dark-content'} backgroundColor={themeColors.background} />
       <AppHeader navigation={navigation} />
 
       <Animated.ScrollView 
@@ -458,18 +460,18 @@ const SubmitReportScreen = ({ route, navigation }) => {
       >
         {/* Page Header */}
         <View style={styles.pageHeader}>
-          <Text style={styles.pageTitle}>Submit Site Report</Text>
+          <Text style={[styles.pageTitle, { color: themeColors.textPrimary }]}>Submit Site Report</Text>
           <Text style={styles.projectName}>Project: {project.name}</Text>
         </View>
 
-        <View style={styles.formCard}>
+        <View style={[styles.formCard, { backgroundColor: themeColors.surface }]}>
           {/* Total Floors */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Total Floors *</Text>
-            <View style={[styles.inputWrapper, validationErrors.totalFloors && styles.inputWrapperError]}>
+            <Text style={[styles.label, { color: themeColors.textPrimary }]}>Total Floors *</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: themeColors.background, borderColor: themeColors.border }, validationErrors.totalFloors && styles.inputWrapperError]}>
               <FontAwesome5 name="building" size={18} color="#64748B" style={styles.inputIcon} />
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: themeColors.textPrimary }]}
                 value={totalFloors}
                 onChangeText={(text) => {
                   setTotalFloors(text);
@@ -491,11 +493,11 @@ const SubmitReportScreen = ({ route, navigation }) => {
 
           {/* Dimensions */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Dimensions (L × W) *</Text>
-            <View style={[styles.inputWrapper, validationErrors.dimensions && styles.inputWrapperError]}>
+            <Text style={[styles.label, { color: themeColors.textPrimary }]}>Dimensions (L × W) *</Text>
+            <View style={[styles.inputWrapper, { backgroundColor: themeColors.background, borderColor: themeColors.border }, validationErrors.dimensions && styles.inputWrapperError]}>
               <FontAwesome5 name="ruler" size={18} color="#64748B" style={styles.inputIcon} />
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: themeColors.textPrimary }]}
                 value={dimensions}
                 onChangeText={(text) => {
                   setDimensions(text);
@@ -516,7 +518,7 @@ const SubmitReportScreen = ({ route, navigation }) => {
 
           {/* Site Media */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Site Photos & Videos * (Real Site Media)</Text>
+            <Text style={[styles.label, { color: themeColors.textPrimary }]}>Site Photos & Videos * (Real Site Media)</Text>
             
             {selectedImages.length > 0 && (
               <ScrollView 
@@ -579,10 +581,10 @@ const SubmitReportScreen = ({ route, navigation }) => {
 
           {/* Remarks */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Remarks (Optional)</Text>
-            <View style={styles.textAreaWrapper}>
+            <Text style={[styles.label, { color: themeColors.textPrimary }]}>Remarks (Optional)</Text>
+            <View style={[styles.textAreaWrapper, { backgroundColor: themeColors.background, borderColor: themeColors.border }]}>
               <TextInput
-                style={styles.textArea}
+                style={[styles.textArea, { color: themeColors.textPrimary }]}
                 value={remarks}
                 onChangeText={setRemarks}
                 placeholder="Any additional observations or notes..."

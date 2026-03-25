@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useTheme } from '../../../context/ThemeContext';
 import {
   View,
   Text,
@@ -9,11 +10,13 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { colors } from '../../../theme/colors';
+// import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
 import { paymentsApi } from '../api';
 
 const AddExtraChargeScreen = ({ route, navigation }) => {
+  const { colors } = useTheme();
+  const styles = useMemo(() => getStyles(colors), [colors]);
   const { project } = route.params;
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
@@ -157,7 +160,7 @@ const AddExtraChargeScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (colors) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,

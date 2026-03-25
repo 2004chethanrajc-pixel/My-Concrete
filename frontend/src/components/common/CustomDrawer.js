@@ -14,12 +14,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../theme/colors';
 import { typography } from '../../theme/typography';
 import { useAuth } from '../../hooks/useAuth';
+import { useTheme } from '../../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
 const DRAWER_WIDTH = width * 0.8;
 
 const CustomDrawer = (props) => {
   const { user, logout } = useAuth();
+  const { isDarkMode, toggleDarkMode } = useTheme();
 
   const getHomeScreenName = () => {
     switch (user?.role) {
@@ -89,9 +91,9 @@ const CustomDrawer = (props) => {
   };
 
   const MenuItem = ({ icon, label, onPress, isDanger = false, iconFamily = 'FontAwesome5' }) => {
-    const IconComponent = iconFamily === 'MaterialIcons' ? MaterialIcons : 
-                         iconFamily === 'Ionicons' ? Ionicons : FontAwesome5;
-    
+    const IconComponent = iconFamily === 'MaterialIcons' ? MaterialIcons :
+      iconFamily === 'Ionicons' ? Ionicons : FontAwesome5;
+
     return (
       <TouchableOpacity
         style={[styles.menuItem, isDanger && styles.dangerMenuItem]}
@@ -135,7 +137,7 @@ const CustomDrawer = (props) => {
               <Text style={styles.userEmail}>{user?.email || 'email@example.com'}</Text>
             </View>
           </View>
-          
+
           {/* Role Badge */}
           <View style={styles.roleBadge}>
             <FontAwesome5 name={getRoleIcon()} size={10} color="#FFFFFF" />
@@ -147,39 +149,39 @@ const CustomDrawer = (props) => {
       </LinearGradient>
 
       {/* Menu Items with Scroll */}
-      <ScrollView 
+      <ScrollView
         style={styles.menuContainer}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.menuContent}
       >
         <MenuSection title="MAIN">
-          <MenuItem 
-            icon="home" 
-            label="Dashboard" 
-            onPress={() => handleNavigation(getHomeScreenName())} 
+          <MenuItem
+            icon="home"
+            label="Dashboard"
+            onPress={() => handleNavigation(getHomeScreenName())}
           />
-          <MenuItem 
-            icon="user-circle" 
-            label="Profile" 
-            onPress={() => handleNavigation('Profile')} 
+          <MenuItem
+            icon="user-circle"
+            label="Profile"
+            onPress={() => handleNavigation('Profile')}
           />
         </MenuSection>
 
         {/* Site Incharge specific menu items */}
         {user?.role === 'site_incharge' && (
           <MenuSection title="SITE MANAGEMENT">
-            <MenuItem 
-              icon="calendar-check" 
-              label="View Site Visits" 
+            <MenuItem
+              icon="calendar-check"
+              label="View Site Visits"
               onPress={() => {
                 props.navigation.navigate('ProjectsList', { filter: 'pending_visits' });
                 props.navigation.closeDrawer();
-              }} 
+              }}
             />
-            <MenuItem 
-              icon="file-alt" 
-              label="View All Reports" 
-              onPress={() => handleNavigation('ReportsList')} 
+            <MenuItem
+              icon="file-alt"
+              label="View All Reports"
+              onPress={() => handleNavigation('ReportsList')}
             />
           </MenuSection>
         )}
@@ -187,10 +189,10 @@ const CustomDrawer = (props) => {
         {/* Super Admin specific menu items */}
         {user?.role === 'super_admin' && (
           <MenuSection title="ADMIN">
-            <MenuItem 
-              icon="history" 
-              label="Audit Logs" 
-              onPress={() => handleNavigation('AuditLogs')} 
+            <MenuItem
+              icon="history"
+              label="Audit Logs"
+              onPress={() => handleNavigation('AuditLogs')}
             />
           </MenuSection>
         )}
@@ -198,10 +200,10 @@ const CustomDrawer = (props) => {
         {/* Finance specific menu items */}
         {user?.role === 'finance' && (
           <MenuSection title="FINANCE">
-            <MenuItem 
-              icon="check-circle" 
-              label="Verify Payments" 
-              onPress={() => handleNavigation('VerifyPayments')} 
+            <MenuItem
+              icon="check-circle"
+              label="Verify Payments"
+              onPress={() => handleNavigation('VerifyPayments')}
             />
             <MenuItem
               icon="box"
@@ -225,27 +227,53 @@ const CustomDrawer = (props) => {
         <MenuSection title="DOCUMENTS">
           {/* Hide View Reports for Site Incharge */}
           {user?.role !== 'site_incharge' && (
-            <MenuItem 
-              icon="file-alt" 
-              label="View Reports" 
-              onPress={() => handleNavigation('ReportsList')} 
+            <MenuItem
+              icon="file-alt"
+              label="View Reports"
+              onPress={() => handleNavigation('ReportsList')}
             />
           )}
 
           {user?.role !== 'site_incharge' && (
-            <MenuItem 
-              icon="rupee-sign" 
-              label="View Quotations" 
-              onPress={() => handleNavigation('QuotationsList')} 
+            <MenuItem
+              icon="rupee-sign"
+              label="View Quotations"
+              onPress={() => handleNavigation('QuotationsList')}
             />
           )}
         </MenuSection>
 
+        {/* Dark Mode Toggle — All Users */}
+        <View style={styles.darkModeSection}>
+          <TouchableOpacity
+            style={styles.darkModeToggle}
+            onPress={toggleDarkMode}
+            activeOpacity={0.7}
+          >
+            <View style={styles.darkModeLeft}>
+              <View style={styles.darkModeIconContainer}>
+                <Ionicons
+                  name={isDarkMode ? 'moon' : 'sunny'}
+                  size={20}
+                  color={isDarkMode ? '#A78BFA' : '#F59E0B'}
+                />
+              </View>
+              <View>
+                <Text style={styles.darkModeLabel}>Dark Mode</Text>
+                <Text style={styles.darkModeSubLabel}>{isDarkMode ? 'On' : 'Off'}</Text>
+              </View>
+            </View>
+            <View style={[styles.toggleTrack, isDarkMode && styles.toggleTrackActive]}>
+              <View style={[styles.toggleThumb, isDarkMode && styles.toggleThumbActive]} />
+            </View>
+          </TouchableOpacity>
+        </View>
+
         {/* Logout Section */}
         <View style={styles.logoutSection}>
-          <MenuItem 
-            icon="sign-out-alt" 
-            label="Logout" 
+          <MenuItem
+            icon="sign-out-alt"
+            label="Logout"
             onPress={handleLogout}
             isDanger={true}
           />
@@ -401,6 +429,72 @@ const styles = StyleSheet.create({
   logoutSection: {
     marginTop: 16,
     paddingHorizontal: 12,
+  },
+  darkModeSection: {
+    marginTop: 16,
+    paddingHorizontal: 12,
+    marginBottom: 8,
+  },
+  darkModeToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F8FAFC',
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  darkModeLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  darkModeIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: '#EEF2FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  darkModeLabel: {
+    fontSize: 15,
+    color: '#1E293B',
+    fontWeight: '600',
+    letterSpacing: -0.2,
+  },
+  darkModeSubLabel: {
+    fontSize: 12,
+    color: '#64748B',
+    marginTop: 1,
+  },
+  toggleTrack: {
+    width: 46,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: '#CBD5E1',
+    justifyContent: 'center',
+    paddingHorizontal: 3,
+  },
+  toggleTrackActive: {
+    backgroundColor: '#6366F1',
+  },
+  toggleThumb: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+    alignSelf: 'flex-start',
+  },
+  toggleThumbActive: {
+    alignSelf: 'flex-end',
   },
   footer: {
     overflow: 'hidden',

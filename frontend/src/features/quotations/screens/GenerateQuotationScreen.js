@@ -17,8 +17,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
 import { useGenerateQuotation } from '../hooks';
+import { useTheme } from '../../../context/ThemeContext';
 
 const GenerateQuotationScreen = ({ route, navigation }) => {
+  const { colors: themeColors } = useTheme();
   const { project } = route.params;
   const [materialCost, setMaterialCost] = useState('');
   const [labourCost, setLabourCost] = useState('');
@@ -36,7 +38,7 @@ const GenerateQuotationScreen = ({ route, navigation }) => {
     const labour = parseFloat(labourCost) || 0;
     const transport = parseFloat(transportCost) || 0;
     const other = parseFloat(otherCost) || 0;
-    
+
     const calculated = material + labour + transport + other;
     setTotalCost(calculated > 0 ? calculated.toFixed(2) : '');
   }, [materialCost, labourCost, transportCost, otherCost]);
@@ -147,15 +149,15 @@ const GenerateQuotationScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#0A84FF" />
-      
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+      <StatusBar barStyle={themeColors.background === '#121212' ? 'light-content' : 'dark-content'} backgroundColor="#0A84FF" />
+
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 20}
       >
-        <ScrollView 
+        <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
@@ -167,7 +169,7 @@ const GenerateQuotationScreen = ({ route, navigation }) => {
             end={{ x: 1, y: 1 }}
             style={styles.header}
           >
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.backButton}
               onPress={() => navigation.goBack()}
             >
@@ -183,21 +185,21 @@ const GenerateQuotationScreen = ({ route, navigation }) => {
           </LinearGradient>
 
           {/* Form Card */}
-          <View style={styles.formCard}>
-            <View style={styles.sectionHeader}>
+          <View style={[styles.formCard, { backgroundColor: themeColors.surface }]}>
+            <View style={[styles.sectionHeader, { borderBottomColor: themeColors.border }]}>
               <MaterialIcons name="receipt" size={22} color="#0A84FF" />
-              <Text style={styles.sectionTitle}>Cost Breakdown</Text>
+              <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Cost Breakdown</Text>
             </View>
 
             {/* Material Cost */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>
+              <Text style={[styles.label, { color: themeColors.textPrimary }]}>
                 Material Cost <Text style={styles.requiredStar}>*</Text>
               </Text>
-              <View style={[styles.inputContainer, validationErrors.materialCost && styles.inputContainerError]}>
+              <View style={[styles.inputContainer, { backgroundColor: themeColors.background, borderColor: themeColors.border }, validationErrors.materialCost && styles.inputContainerError]}>
                 <MaterialIcons name="inventory" size={20} color="#0A84FF" style={styles.inputIcon} />
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { color: themeColors.textPrimary }]}
                   value={materialCost}
                   onChangeText={(text) => {
                     setMaterialCost(text);
@@ -220,13 +222,13 @@ const GenerateQuotationScreen = ({ route, navigation }) => {
 
             {/* Labour Cost */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>
+              <Text style={[styles.label, { color: themeColors.textPrimary }]}>
                 Labour Cost <Text style={styles.requiredStar}>*</Text>
               </Text>
-              <View style={[styles.inputContainer, validationErrors.labourCost && styles.inputContainerError]}>
+              <View style={[styles.inputContainer, { backgroundColor: themeColors.background, borderColor: themeColors.border }, validationErrors.labourCost && styles.inputContainerError]}>
                 <MaterialIcons name="engineering" size={20} color="#0A84FF" style={styles.inputIcon} />
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { color: themeColors.textPrimary }]}
                   value={labourCost}
                   onChangeText={(text) => {
                     setLabourCost(text);
@@ -249,13 +251,13 @@ const GenerateQuotationScreen = ({ route, navigation }) => {
 
             {/* Transport Cost */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>
+              <Text style={[styles.label, { color: themeColors.textPrimary }]}>
                 Transport Cost <Text style={styles.requiredStar}>*</Text>
               </Text>
-              <View style={[styles.inputContainer, validationErrors.transportCost && styles.inputContainerError]}>
+              <View style={[styles.inputContainer, { backgroundColor: themeColors.background, borderColor: themeColors.border }, validationErrors.transportCost && styles.inputContainerError]}>
                 <MaterialIcons name="local-shipping" size={20} color="#0A84FF" style={styles.inputIcon} />
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { color: themeColors.textPrimary }]}
                   value={transportCost}
                   onChangeText={(text) => {
                     setTransportCost(text);
@@ -278,13 +280,13 @@ const GenerateQuotationScreen = ({ route, navigation }) => {
 
             {/* Other Cost */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>
+              <Text style={[styles.label, { color: themeColors.textPrimary }]}>
                 Other Cost <Text style={styles.requiredStar}>*</Text>
               </Text>
-              <View style={[styles.inputContainer, validationErrors.otherCost && styles.inputContainerError]}>
+              <View style={[styles.inputContainer, { backgroundColor: themeColors.background, borderColor: themeColors.border }, validationErrors.otherCost && styles.inputContainerError]}>
                 <MaterialIcons name="more-horiz" size={20} color="#0A84FF" style={styles.inputIcon} />
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { color: themeColors.textPrimary }]}
                   value={otherCost}
                   onChangeText={(text) => {
                     setOtherCost(text);
@@ -313,11 +315,11 @@ const GenerateQuotationScreen = ({ route, navigation }) => {
 
             {/* Total Cost (Auto-calculated) */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>
+              <Text style={[styles.label, { color: themeColors.textPrimary }]}>
                 Total Cost <Text style={styles.requiredStar}>*</Text>
               </Text>
               <View style={styles.totalCostContainer}>
-                <View style={[styles.totalCostDisplay, validationErrors.totalCost && styles.inputContainerError]}>
+                <View style={[styles.totalCostDisplay, { backgroundColor: themeColors.background }, validationErrors.totalCost && styles.inputContainerError]}>
                   <MaterialIcons name="calculate" size={20} color="#0A84FF" style={styles.inputIcon} />
                   <Text style={styles.totalCostText}>
                     {totalCost ? `₹${totalCost}` : '₹0.00'}
@@ -338,11 +340,11 @@ const GenerateQuotationScreen = ({ route, navigation }) => {
 
             {/* Advance Amount */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Advance Amount <Text style={styles.optionalTag}>(Optional)</Text></Text>
-              <View style={[styles.inputContainer, validationErrors.advanceAmount && styles.inputContainerError]}>
+              <Text style={[styles.label, { color: themeColors.textPrimary }]}>Advance Amount <Text style={styles.optionalTag}>(Optional)</Text></Text>
+              <View style={[styles.inputContainer, { backgroundColor: themeColors.background, borderColor: themeColors.border }, validationErrors.advanceAmount && styles.inputContainerError]}>
                 <MaterialIcons name="payment" size={20} color="#0A84FF" style={styles.inputIcon} />
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { color: themeColors.textPrimary }]}
                   value={advanceAmount}
                   onChangeText={(text) => {
                     setAdvanceAmount(text);

@@ -37,6 +37,7 @@ import { auditApi } from '../../audit/api';
 import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
 import { useScrollPosition } from '../../../hooks/useScrollPosition';
+import { useTheme } from '../../../context/ThemeContext';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
 
@@ -51,6 +52,7 @@ const isVideoFile = (path) => /\.(mp4|mov|avi|mkv|webm|3gp)$/i.test(path);
 const ViewReportScreen = ({ route, navigation }) => {
   const { reportId, projectId } = route.params;
   const { scrollY, onScroll } = useScrollPosition();
+  const { colors: themeColors } = useTheme();
   
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -564,13 +566,13 @@ const ViewReportScreen = ({ route, navigation }) => {
       style={styles.infoCard}
     >
       <LinearGradient
-        colors={['#FFFFFF', '#F8FAFC']}
+        colors={[themeColors.cardBg, themeColors.surfaceSecondary]}
         style={styles.infoCardGradient}
       >
         <View style={styles.infoCardHeader}>
           <View style={styles.infoCardTitleContainer}>
             <MaterialCommunityIcons name={icon} size={22} color="#3B82F6" />
-            <Text style={styles.infoCardTitle}>{title}</Text>
+            <Text style={[styles.infoCardTitle, { color: themeColors.textPrimary }]}>{title}</Text>
           </View>
         </View>
         <View style={styles.infoCardContent}>
@@ -581,9 +583,9 @@ const ViewReportScreen = ({ route, navigation }) => {
   );
 
   const InfoRow = ({ label, value, highlight = false }) => (
-    <View style={styles.infoRow}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text style={[styles.infoValue, highlight && styles.infoValueHighlight]}>
+    <View style={[styles.infoRow, { borderBottomColor: themeColors.divider }]}>
+      <Text style={[styles.infoLabel, { color: themeColors.textSecondary }]}>{label}</Text>
+      <Text style={[styles.infoValue, { color: themeColors.textPrimary }, highlight && styles.infoValueHighlight]}>
         {value}
       </Text>
     </View>
@@ -591,7 +593,7 @@ const ViewReportScreen = ({ route, navigation }) => {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
+      <View style={[styles.centerContainer, { backgroundColor: themeColors.background }]}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
         <AppHeader navigation={navigation} />
         <View style={styles.loadingContent}>
@@ -610,7 +612,7 @@ const ViewReportScreen = ({ route, navigation }) => {
 
   if (!report) {
     return (
-      <View style={styles.centerContainer}>
+      <View style={[styles.centerContainer, { backgroundColor: themeColors.background }]}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
         <AppHeader navigation={navigation} />
         <View style={styles.errorContent}>
@@ -637,7 +639,7 @@ const ViewReportScreen = ({ route, navigation }) => {
   const statusText = report.approval_status?.toUpperCase() || 'PENDING';
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <AppHeader navigation={navigation} />
 

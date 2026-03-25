@@ -26,8 +26,10 @@ import {
   StatusChip 
 } from '../../../components/common';
 import { useScrollPosition } from '../../../hooks/useScrollPosition';
+import { useTheme } from '../../../context/ThemeContext';
 
 const VerifyPaymentsScreen = ({ navigation }) => {
+  const { colors } = useTheme();
   const [pendingPayments, setPendingPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -179,8 +181,8 @@ const VerifyPaymentsScreen = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
 
         <ScrollView

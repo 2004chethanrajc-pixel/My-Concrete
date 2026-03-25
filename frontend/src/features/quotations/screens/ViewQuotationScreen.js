@@ -21,6 +21,7 @@ import { quotationsApi } from '../api';
 import { reportsApi } from '../../reports/api';
 import { auditApi } from '../../audit/api';
 import { paymentsApi } from '../../payments/api';
+import { useTheme } from '../../../context/ThemeContext';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
 
@@ -28,6 +29,7 @@ const ViewQuotationScreen = ({ route, navigation }) => {
   const { projectId } = route.params;
   const { user } = useAuth();
   const { scrollY, onScroll } = useScrollPosition();
+  const { colors: themeColors } = useTheme();
   
   const [loading, setLoading] = useState(true);
   const [approving, setApproving] = useState(false);
@@ -726,7 +728,7 @@ const ViewQuotationScreen = ({ route, navigation }) => {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
+      <View style={[styles.centerContainer, { backgroundColor: themeColors.background }]}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
         <AppHeader navigation={navigation} />
         <View style={styles.loadingContent}>
@@ -745,7 +747,7 @@ const ViewQuotationScreen = ({ route, navigation }) => {
 
   if (error) {
     return (
-      <View style={styles.centerContainer}>
+      <View style={[styles.centerContainer, { backgroundColor: themeColors.background }]}>
         <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
         <AppHeader navigation={navigation} />
         <View style={styles.errorContent}>
@@ -773,7 +775,7 @@ const ViewQuotationScreen = ({ route, navigation }) => {
   const displayProjectName = projectName || `Project ${projectId}`;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <AppHeader navigation={navigation} />
       
@@ -826,16 +828,16 @@ const ViewQuotationScreen = ({ route, navigation }) => {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <MaterialCommunityIcons name="clipboard-text" size={20} color="#3B82F6" />
-            <Text style={styles.sectionTitle}>Project Summary</Text>
+            <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Project Summary</Text>
           </View>
-          <View style={styles.card}>
-            <View style={styles.row}>
-              <Text style={styles.label}>Project ID</Text>
-              <Text style={styles.value}>{projectId}</Text>
+          <View style={[styles.card, { backgroundColor: themeColors.cardBg }]}>
+            <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+              <Text style={[styles.label, { color: themeColors.textSecondary }]}>Project ID</Text>
+              <Text style={[styles.value, { color: themeColors.textPrimary }]}>{projectId}</Text>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Status</Text>
-              <View style={styles.statusChip}>
+            <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+              <Text style={[styles.label, { color: themeColors.textSecondary }]}>Status</Text>
+              <View style={[styles.statusChip, { backgroundColor: themeColors.sectionBg }]}>
                 <Text style={[
                   styles.statusChipText,
                   { color: isApproved ? '#10B981' : '#F59E0B' }
@@ -845,8 +847,8 @@ const ViewQuotationScreen = ({ route, navigation }) => {
               </View>
             </View>
             {projectStatus && (
-              <View style={styles.row}>
-                <Text style={styles.label}>Project Status</Text>
+              <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+                <Text style={[styles.label, { color: themeColors.textSecondary }]}>Project Status</Text>
                 <View style={[
                   styles.projectStatusChip, 
                   { backgroundColor: getProjectStatusColor(projectStatus) }
@@ -884,23 +886,23 @@ const ViewQuotationScreen = ({ route, navigation }) => {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <MaterialCommunityIcons name="calculator" size={20} color="#3B82F6" />
-            <Text style={styles.sectionTitle}>Quotation Breakdown</Text>
+            <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Quotation Breakdown</Text>
           </View>
-          <View style={styles.card}>
-            <View style={styles.row}>
-              <Text style={styles.label}>Material Cost</Text>
+          <View style={[styles.card, { backgroundColor: themeColors.cardBg }]}>
+            <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+              <Text style={[styles.label, { color: themeColors.textSecondary }]}>Material Cost</Text>
               <Text style={styles.amount}>{formatCurrency(materialCost)}</Text>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Labour Cost</Text>
+            <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+              <Text style={[styles.label, { color: themeColors.textSecondary }]}>Labour Cost</Text>
               <Text style={styles.amount}>{formatCurrency(labourCost)}</Text>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Transport Cost</Text>
+            <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+              <Text style={[styles.label, { color: themeColors.textSecondary }]}>Transport Cost</Text>
               <Text style={styles.amount}>{formatCurrency(transportCost)}</Text>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Other Cost</Text>
+            <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+              <Text style={[styles.label, { color: themeColors.textSecondary }]}>Other Cost</Text>
               <Text style={styles.amount}>{formatCurrency(otherCost)}</Text>
             </View>
             
@@ -968,9 +970,9 @@ const ViewQuotationScreen = ({ route, navigation }) => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <MaterialCommunityIcons name="alert-circle" size={20} color="#F59E0B" />
-              <Text style={styles.sectionTitle}>Extra Charges</Text>
+              <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Extra Charges</Text>
             </View>
-            <View style={styles.card}>
+            <View style={[styles.card, { backgroundColor: themeColors.cardBg }]}>
               {extraCharges.map((charge, index) => {
                 const isPending = charge.status === 'pending' && charge.payment_method !== null;
                 
@@ -1047,9 +1049,9 @@ const ViewQuotationScreen = ({ route, navigation }) => {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <MaterialCommunityIcons name="wallet" size={20} color="#10B981" />
-              <Text style={styles.sectionTitle}>Payment Summary</Text>
+              <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Payment Summary</Text>
             </View>
-            <View style={styles.paymentCard}>
+            <View style={[styles.paymentCard, { backgroundColor: themeColors.cardBg }]}>
               <View style={styles.paymentRow}>
                 <Text style={styles.paymentLabel}>Total Paid</Text>
                 <Text style={styles.paymentValueSuccess}>
@@ -1081,11 +1083,11 @@ const ViewQuotationScreen = ({ route, navigation }) => {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <MaterialCommunityIcons name="information" size={20} color="#3B82F6" />
-            <Text style={styles.sectionTitle}>Quotation Status</Text>
+            <Text style={[styles.sectionTitle, { color: themeColors.textPrimary }]}>Quotation Status</Text>
           </View>
-          <View style={styles.card}>
-            <View style={styles.row}>
-              <Text style={styles.label}>Approved</Text>
+          <View style={[styles.card, { backgroundColor: themeColors.cardBg }]}>
+            <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+              <Text style={[styles.label, { color: themeColors.textSecondary }]}>Approved</Text>
               <View style={styles.approvedIndicator}>
                 <MaterialCommunityIcons 
                   name={isApproved ? 'check-circle' : 'close-circle'} 
@@ -1101,18 +1103,18 @@ const ViewQuotationScreen = ({ route, navigation }) => {
               </View>
             </View>
             {isApproved && approvedAt ? (
-              <View style={styles.row}>
-                <Text style={styles.label}>Approved At</Text>
-                <Text style={styles.dateValue}>{formatDate(approvedAt)}</Text>
+              <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+                <Text style={[styles.label, { color: themeColors.textSecondary }]}>Approved At</Text>
+                <Text style={[styles.dateValue, { color: themeColors.textPrimary }]}>{formatDate(approvedAt)}</Text>
               </View>
             ) : null}
-            <View style={styles.row}>
-              <Text style={styles.label}>Created At</Text>
-              <Text style={styles.dateValue}>{formatDate(createdAt)}</Text>
+            <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+              <Text style={[styles.label, { color: themeColors.textSecondary }]}>Created At</Text>
+              <Text style={[styles.dateValue, { color: themeColors.textPrimary }]}>{formatDate(createdAt)}</Text>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.label}>Generated By</Text>
-              <Text style={styles.value}>{generatedBy || 'N/A'}</Text>
+            <View style={[styles.row, { borderBottomColor: themeColors.divider }]}>
+              <Text style={[styles.label, { color: themeColors.textSecondary }]}>Generated By</Text>
+              <Text style={[styles.value, { color: themeColors.textPrimary }]}>{generatedBy || 'N/A'}</Text>
             </View>
           </View>
         </View>

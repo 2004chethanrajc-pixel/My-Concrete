@@ -14,8 +14,10 @@ import {
 import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
 import apiClient from '../../../services/apiClient';
+import { useTheme } from '../../../context/ThemeContext';
 
 const ForgotPasswordScreen = ({ navigation }) => {
+  const { colors: themeColors } = useTheme();
   const [identifier, setIdentifier] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -132,16 +134,17 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   const renderStep1 = () => (
     <>
-      <Text style={styles.title}>Forgot Password</Text>
-      <Text style={styles.subtitle}>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>Forgot Password</Text>
+      <Text style={[styles.subtitle, { color: themeColors.textSecondary }]}>
         Enter your email or phone number and we'll send you an OTP to reset your password
       </Text>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email or Phone Number</Text>
+        <Text style={[styles.label, { color: themeColors.textPrimary }]}>Email or Phone Number</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: themeColors.surface, borderColor: themeColors.border, color: themeColors.textPrimary }]}
           placeholder="Enter your email or phone"
+          placeholderTextColor={themeColors.textSecondary}
           value={identifier}
           onChangeText={setIdentifier}
           keyboardType="default"
@@ -174,19 +177,20 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   const renderStep2 = () => (
     <>
-      <Text style={styles.title}>Enter OTP</Text>
-      <Text style={styles.subtitle}>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>Enter OTP</Text>
+      <Text style={[styles.subtitle, { color: themeColors.textSecondary }]}>
         We've sent a 6-digit OTP to your {isEmail ? 'email' : 'phone'}: {identifier}
       </Text>
-      <Text style={styles.subtitleSmall}>
+      <Text style={[styles.subtitleSmall, { color: themeColors.textSecondary }]}>
         Please check your {isEmail ? 'email inbox' : 'phone messages'} (and spam folder)
       </Text>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>OTP Code</Text>
+        <Text style={[styles.label, { color: themeColors.textPrimary }]}>OTP Code</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: themeColors.surface, borderColor: themeColors.border, color: themeColors.textPrimary }]}
           placeholder="Enter 6-digit OTP"
+          placeholderTextColor={themeColors.textSecondary}
           value={otp}
           onChangeText={setOtp}
           keyboardType="number-pad"
@@ -219,16 +223,17 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   const renderStep3 = () => (
     <>
-      <Text style={styles.title}>Set New Password</Text>
-      <Text style={styles.subtitle}>
+      <Text style={[styles.title, { color: themeColors.textPrimary }]}>Set New Password</Text>
+      <Text style={[styles.subtitle, { color: themeColors.textSecondary }]}>
         Please enter your new password
       </Text>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>New Password</Text>
+        <Text style={[styles.label, { color: themeColors.textPrimary }]}>New Password</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: themeColors.surface, borderColor: themeColors.border, color: themeColors.textPrimary }]}
           placeholder="Enter new password"
+          placeholderTextColor={themeColors.textSecondary}
           value={newPassword}
           onChangeText={setNewPassword}
           secureTextEntry
@@ -237,10 +242,11 @@ const ForgotPasswordScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Confirm Password</Text>
+        <Text style={[styles.label, { color: themeColors.textPrimary }]}>Confirm Password</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: themeColors.surface, borderColor: themeColors.border, color: themeColors.textPrimary }]}
           placeholder="Confirm new password"
+          placeholderTextColor={themeColors.textSecondary}
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
@@ -264,7 +270,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView

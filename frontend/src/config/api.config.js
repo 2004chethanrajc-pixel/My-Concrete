@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 
 // Get environment variables
-const API_HOST = Constants.expoConfig?.extra?.apiHost || '192.168.1.74';
+const API_HOST = Constants.expoConfig?.extra?.apiHost || '10.106.123.213';
 const API_PORT = Constants.expoConfig?.extra?.apiPort || '5000';
 const API_PROTOCOL = Constants.expoConfig?.extra?.apiProtocol || 'http';
 

@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import * as Notifications from 'expo-notifications';
 import { AuthProvider } from './src/context/AuthContext';
+import { ThemeProvider } from './src/context/ThemeContext';
 // import { useUserStatusCheck } from './src/hooks/useUserStatusCheck';
 import AppNavigator from './src/navigation/AppNavigator';
 import { initDB } from './src/services/offlineQueue';
@@ -119,10 +120,12 @@ export default function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <NavigationContainer ref={navigationRef}>
-        <AppContent />
-      </NavigationContainer>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <NavigationContainer ref={navigationRef}>
+          <AppContent />
+        </NavigationContainer>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

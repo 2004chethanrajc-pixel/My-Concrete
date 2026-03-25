@@ -16,11 +16,13 @@ import { authApi } from '../api';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
 import { makeCall, sendEmail } from '../../../utils/contactUtils';
+import { useTheme } from '../../../context/ThemeContext';
 
 const ProfileScreen = ({ navigation }) => {
   const { user, logout, updateUser } = useAuth();
   const [loggingOut, setLoggingOut] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
+  const { colors } = useTheme();
 
   // Fetch fresh profile data on mount to get new fields
   useEffect(() => {
@@ -132,26 +134,26 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const InfoCard = ({ title, items }) => (
-    <View style={styles.infoCard}>
-      <Text style={styles.infoCardTitle}>{title}</Text>
+    <View style={[styles.infoCard, { backgroundColor: colors.surface }]}>
+      <Text style={[styles.infoCardTitle, { color: colors.textPrimary }]}>{title}</Text>
       {items.map((item, index) => {
         const isEmail = item.label.toLowerCase().includes('email');
         const isPhone = item.label.toLowerCase().includes('phone');
         const hasAction = (isEmail || isPhone) && item.value && item.value !== 'Not provided';
         return (
-          <View key={index} style={styles.infoRow}>
+          <View key={index} style={[styles.infoRow, { borderBottomColor: colors.divider }]}>
             <View style={styles.infoRowLeft}>
               <View style={[styles.infoIcon, { backgroundColor: `${item.color}15` }]}>
                 <MaterialIcons name={item.icon} size={20} color={item.color} />
               </View>
-              <Text style={styles.infoLabel}>{item.label}</Text>
+              <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>{item.label}</Text>
             </View>
             {hasAction ? (
               <TouchableOpacity onPress={() => isEmail ? sendEmail(item.value) : makeCall(item.value)}>
                 <Text style={[styles.infoValue, styles.linkValue]}>{item.value}</Text>
               </TouchableOpacity>
             ) : (
-              <Text style={styles.infoValue}>{item.value}</Text>
+              <Text style={[styles.infoValue, { color: colors.textPrimary }]}>{item.value}</Text>
             )}
           </View>
         );
@@ -225,7 +227,7 @@ const ProfileScreen = ({ navigation }) => {
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <AppHeader navigation={navigation} />
       

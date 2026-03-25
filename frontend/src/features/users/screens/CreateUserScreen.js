@@ -18,10 +18,12 @@ import { colors } from '../../../theme/colors';
 import { typography } from '../../../theme/typography';
 import { useAuth } from '../../../hooks/useAuth';
 import { SimpleDatePicker } from '../../../components/common/SimpleDateTimePicker';
+import { useTheme } from '../../../context/ThemeContext';
 
 const CreateUserScreen = ({ route, navigation }) => {
   const { role } = route.params || {};
   const { user: currentUser } = useAuth();
+  const { colors: themeColors } = useTheme();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -143,7 +145,7 @@ const CreateUserScreen = ({ route, navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: themeColors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
@@ -152,90 +154,90 @@ const CreateUserScreen = ({ route, navigation }) => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.header}>
+        <View style={[styles.header, { backgroundColor: themeColors.surface, borderBottomColor: themeColors.border }]}>
           <TouchableOpacity 
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <FontAwesome5 name="arrow-left" size={20} color={colors.text} />
+            <FontAwesome5 name="arrow-left" size={20} color={themeColors.textPrimary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Create User</Text>
+          <Text style={[styles.headerTitle, { color: themeColors.textPrimary }]}>Create User</Text>
           <View style={{ width: 40 }} />
         </View>
 
         <View style={styles.content}>
-          <Text style={styles.title}>Create {role ? getRoleDisplayName(role) : 'User'}</Text>
-          <Text style={styles.subtitle}>Enter user details below</Text>
+          <Text style={[styles.title, { color: themeColors.textPrimary }]}>Create {role ? getRoleDisplayName(role) : 'User'}</Text>
+          <Text style={[styles.subtitle, { color: themeColors.textSecondary }]}>Enter user details below</Text>
 
           {/* Required Fields */}
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Required Information</Text>
+            <Text style={[styles.sectionTitle, { color: themeColors.textPrimary, borderBottomColor: themeColors.border }]}>Required Information</Text>
           </View>
 
-          <View style={styles.inputContainer}>
-            <FontAwesome5 name="user" size={16} color={colors.textSecondary} style={styles.inputIcon} />
+          <View style={[styles.inputContainer, { backgroundColor: themeColors.inputBg, borderColor: themeColors.border }]}>
+            <FontAwesome5 name="user" size={16} color={themeColors.textSecondary} style={styles.inputIcon} />
             <TextInput
               placeholder="Full Name *"
-              style={styles.input}
+              style={[styles.input, { color: themeColors.textPrimary }]}
               value={formData.name}
               onChangeText={(value) => handleChange('name', value)}
               autoCapitalize="words"
               editable={!loading}
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={themeColors.placeholderText}
             />
           </View>
 
-          <View style={styles.inputContainer}>
-            <FontAwesome5 name="envelope" size={16} color={colors.textSecondary} style={styles.inputIcon} />
+          <View style={[styles.inputContainer, { backgroundColor: themeColors.inputBg, borderColor: themeColors.border }]}>
+            <FontAwesome5 name="envelope" size={16} color={themeColors.textSecondary} style={styles.inputIcon} />
             <TextInput
               placeholder="Email *"
-              style={styles.input}
+              style={[styles.input, { color: themeColors.textPrimary }]}
               value={formData.email}
               onChangeText={(value) => handleChange('email', value)}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
               editable={!loading}
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={themeColors.placeholderText}
             />
           </View>
 
-          <View style={styles.inputContainer}>
-            <FontAwesome5 name="phone" size={16} color={colors.textSecondary} style={styles.inputIcon} />
+          <View style={[styles.inputContainer, { backgroundColor: themeColors.inputBg, borderColor: themeColors.border }]}>
+            <FontAwesome5 name="phone" size={16} color={themeColors.textSecondary} style={styles.inputIcon} />
             <TextInput
               placeholder="Phone Number *"
-              style={styles.input}
+              style={[styles.input, { color: themeColors.textPrimary }]}
               value={formData.phone}
               onChangeText={(value) => handleChange('phone', value)}
               keyboardType="phone-pad"
               editable={!loading}
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={themeColors.placeholderText}
             />
           </View>
 
-          <View style={styles.inputContainer}>
-            <FontAwesome5 name="lock" size={16} color={colors.textSecondary} style={styles.inputIcon} />
+          <View style={[styles.inputContainer, { backgroundColor: themeColors.inputBg, borderColor: themeColors.border }]}>
+            <FontAwesome5 name="lock" size={16} color={themeColors.textSecondary} style={styles.inputIcon} />
             <TextInput
               placeholder="Password (min 6 characters) *"
-              style={styles.input}
+              style={[styles.input, { color: themeColors.textPrimary }]}
               secureTextEntry
               value={formData.password}
               onChangeText={(value) => handleChange('password', value)}
               autoCapitalize="none"
               autoCorrect={false}
               editable={!loading}
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={themeColors.placeholderText}
             />
           </View>
 
           {!role && (
             <View style={styles.pickerContainer}>
-              <Text style={styles.label}>Role *</Text>
-              <View style={styles.pickerWrapper}>
+              <Text style={[styles.label, { color: themeColors.textPrimary }]}>Role *</Text>
+              <View style={[styles.pickerWrapper, { backgroundColor: themeColors.inputBg, borderColor: themeColors.border }]}>
                 <Picker
                   selectedValue={formData.role}
                   onValueChange={(value) => handleChange('role', value)}
-                  style={styles.picker}
+                  style={[styles.picker, { color: themeColors.textPrimary }]}
                   enabled={!loading}
                   dropdownIconColor={colors.primary}
                 >
@@ -253,7 +255,7 @@ const CreateUserScreen = ({ route, navigation }) => {
 
           {/* Optional Fields */}
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Additional Information (Optional)</Text>
+            <Text style={[styles.sectionTitle, { color: themeColors.textPrimary, borderBottomColor: themeColors.border }]}>Additional Information (Optional)</Text>
           </View>
 
           <SimpleDatePicker
@@ -270,49 +272,49 @@ const CreateUserScreen = ({ route, navigation }) => {
             yearRange={{ start: 1950, end: new Date().getFullYear() }}
           />
 
-          <View style={styles.inputContainer}>
-            <FontAwesome5 name="city" size={16} color={colors.textSecondary} style={styles.inputIcon} />
+          <View style={[styles.inputContainer, { backgroundColor: themeColors.inputBg, borderColor: themeColors.border }]}>
+            <FontAwesome5 name="city" size={16} color={themeColors.textSecondary} style={styles.inputIcon} />
             <TextInput
               placeholder="City"
-              style={styles.input}
+              style={[styles.input, { color: themeColors.textPrimary }]}
               value={formData.city}
               onChangeText={(value) => handleChange('city', value)}
               editable={!loading}
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={themeColors.placeholderText}
             />
           </View>
 
-          <View style={styles.textAreaContainer}>
+          <View style={[styles.textAreaContainer, { backgroundColor: themeColors.inputBg, borderColor: themeColors.border }]}>
             <View style={styles.textAreaIconContainer}>
-              <FontAwesome5 name="home" size={16} color={colors.textSecondary} />
+              <FontAwesome5 name="home" size={16} color={themeColors.textSecondary} />
             </View>
             <TextInput
               placeholder="Current Address"
-              style={styles.textArea}
+              style={[styles.textArea, { color: themeColors.textPrimary }]}
               value={formData.current_address}
               onChangeText={(value) => handleChange('current_address', value)}
               multiline
               numberOfLines={3}
               textAlignVertical="top"
               editable={!loading}
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={themeColors.placeholderText}
             />
           </View>
 
-          <View style={styles.textAreaContainer}>
+          <View style={[styles.textAreaContainer, { backgroundColor: themeColors.inputBg, borderColor: themeColors.border }]}>
             <View style={styles.textAreaIconContainer}>
-              <FontAwesome5 name="building" size={16} color={colors.textSecondary} />
+              <FontAwesome5 name="building" size={16} color={themeColors.textSecondary} />
             </View>
             <TextInput
               placeholder="Permanent Address"
-              style={styles.textArea}
+              style={[styles.textArea, { color: themeColors.textPrimary }]}
               value={formData.permanent_address}
               onChangeText={(value) => handleChange('permanent_address', value)}
               multiline
               numberOfLines={3}
               textAlignVertical="top"
               editable={!loading}
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={themeColors.placeholderText}
             />
           </View>
 
@@ -332,11 +334,11 @@ const CreateUserScreen = ({ route, navigation }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.cancelButton}
+            style={[styles.cancelButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
             onPress={() => navigation.goBack()}
             disabled={loading}
           >
-            <Text style={styles.cancelButtonText}>Cancel</Text>
+            <Text style={[styles.cancelButtonText, { color: themeColors.textSecondary }]}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

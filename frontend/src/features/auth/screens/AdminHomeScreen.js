@@ -25,11 +25,13 @@ import {
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
 import { paymentsApi } from '../../payments/api';
+import { useTheme } from '../../../context/ThemeContext';
 
 const { width } = Dimensions.get('window');
 
 const AdminHomeScreen = ({ navigation }) => {
   const { user } = useAuth();
+  const { colors } = useTheme();
   const { projects, loading: projectsLoading, refetch: refetchProjects } = useProjects();
   const { users, loading: usersLoading, refetch: refetchUsers } = useUsers();
   const { scrollY, onScroll } = useScrollPosition();
@@ -151,7 +153,7 @@ const AdminHomeScreen = ({ navigation }) => {
 
   if (projectsLoading || usersLoading) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <AppHeader navigation={navigation} />
         <LoadingState message="Loading dashboard..." />
       </View>
@@ -212,7 +214,7 @@ const AdminHomeScreen = ({ navigation }) => {
         {isSuperAdmin && (
           <View style={styles.sectionModern}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitleModern}>Super Admin Dashboard</Text>
+              <Text style={[styles.sectionTitleModern, { color: colors.textPrimary }]}>Super Admin Dashboard</Text>
               <View style={styles.superAdminBadge}>
                 <MaterialIcons name="admin-panel-settings" size={14} color="#FFFFFF" />
                 <Text style={styles.superAdminBadgeText}>Super Admin</Text>
@@ -267,7 +269,7 @@ const AdminHomeScreen = ({ navigation }) => {
             {/* Payment Type Graph */}
             <View style={styles.graphSection}>
               <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitleModern}>Payment Type Distribution</Text>
+                <Text style={[styles.sectionTitleModern, { color: colors.textPrimary }]}>Payment Type Distribution</Text>
               </View>
               <View style={styles.graphCard}>
                 <View style={styles.graphHeader}>
@@ -308,7 +310,7 @@ const AdminHomeScreen = ({ navigation }) => {
             {/* Project Status Graph */}
             <View style={styles.graphSection}>
               <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitleModern}>Project Status Overview</Text>
+                <Text style={[styles.sectionTitleModern, { color: colors.textPrimary }]}>Project Status Overview</Text>
               </View>
               <View style={styles.graphCard}>
                 <View style={styles.graphHeader}>
@@ -351,7 +353,7 @@ const AdminHomeScreen = ({ navigation }) => {
         {/* Projects Overview Section */}
         <View style={styles.sectionModern}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitleModern}>Project Management</Text>
+            <Text style={[styles.sectionTitleModern, { color: colors.textPrimary }]}>Project Management</Text>
             <TouchableOpacity onPress={() => navigation.navigate('ProjectsList')}>
               <Text style={styles.seeAllText}>See All</Text>
             </TouchableOpacity>
@@ -402,7 +404,7 @@ const AdminHomeScreen = ({ navigation }) => {
         {/* User Management Section */}
         <View style={styles.sectionModern}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitleModern}>User Management</Text>
+            <Text style={[styles.sectionTitleModern, { color: colors.textPrimary }]}>User Management</Text>
             <TouchableOpacity onPress={() => navigation.navigate('UsersList', { activeOnly: true })}>
               <Text style={styles.seeAllText}>View All</Text>
             </TouchableOpacity>
@@ -482,7 +484,7 @@ const AdminHomeScreen = ({ navigation }) => {
 
         {/* Reports Section */}
         <View style={[styles.sectionModern, styles.lastSection]}>
-          <Text style={styles.sectionTitleModern}>Reports & Analytics</Text>
+          <Text style={[styles.sectionTitleModern, { color: colors.textPrimary }]}>Reports & Analytics</Text>
           
           <TouchableOpacity 
             style={styles.reportCardModern}

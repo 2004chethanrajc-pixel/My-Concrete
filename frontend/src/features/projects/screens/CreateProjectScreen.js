@@ -22,9 +22,11 @@ import { projectsApi } from '../api';
 import { useScrollPosition } from '../../../hooks/useScrollPosition';
 import AppHeader from '../../../components/common/AppHeader';
 import BottomNavigation from '../../../components/common/BottomNavigation';
+import { useTheme } from '../../../context/ThemeContext';
 
 const CreateProjectScreen = ({ navigation }) => {
   const { user } = useAuth();
+  const { colors } = useTheme();
   const [name, setName] = useState('');
   const [location, setLocation] = useState('');
   const [customerId, setCustomerId] = useState('');
@@ -168,8 +170,8 @@ const CreateProjectScreen = ({ navigation }) => {
 
   if (loadingUsers) {
     return (
-      <View style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <StatusBar barStyle={colors.background === '#121212' ? 'light-content' : 'dark-content'} backgroundColor={colors.surface} />
         <AppHeader navigation={navigation} />
         <View style={styles.loadingContent}>
           <ActivityIndicator size="large" color="#0A84FF" />
@@ -183,8 +185,8 @@ const CreateProjectScreen = ({ navigation }) => {
   const loading = creatingProject;
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <StatusBar barStyle={colors.background === '#121212' ? 'light-content' : 'dark-content'} backgroundColor={colors.surface} />
       <AppHeader navigation={navigation} />
 
       <KeyboardAvoidingView
@@ -200,14 +202,14 @@ const CreateProjectScreen = ({ navigation }) => {
           onScroll={onScroll}
           scrollEventThrottle={16}
         >
-          <View style={styles.formCard}>
+          <View style={[styles.formCard, { backgroundColor: colors.surface }]}>
             {/* Project Name */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Project name <Text style={styles.requiredStar}>*</Text></Text>
-              <View style={[styles.inputContainer, validationErrors.name && styles.inputContainerError]}>
+              <Text style={[styles.label, { color: colors.textPrimary }]}>Project name <Text style={styles.requiredStar}>*</Text></Text>
+              <View style={[styles.inputContainer, { backgroundColor: colors.background, borderColor: colors.border }, validationErrors.name && styles.inputContainerError]}>
                 <MaterialIcons name="assignment" size={20} color="#0A84FF" style={styles.inputIcon} />
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { color: colors.textPrimary }]}
                   value={name}
                   onChangeText={(text) => {
                     setName(text);
@@ -229,11 +231,11 @@ const CreateProjectScreen = ({ navigation }) => {
 
             {/* Location */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Location <Text style={styles.requiredStar}>*</Text></Text>
-              <View style={[styles.inputContainer, validationErrors.location && styles.inputContainerError]}>
+              <Text style={[styles.label, { color: colors.textPrimary }]}>Location <Text style={styles.requiredStar}>*</Text></Text>
+              <View style={[styles.inputContainer, { backgroundColor: colors.background, borderColor: colors.border }, validationErrors.location && styles.inputContainerError]}>
                 <MaterialIcons name="location-on" size={20} color="#0A84FF" style={styles.inputIcon} />
                 <TextInput
-                  style={[styles.input, styles.textArea]}
+                  style={[styles.input, styles.textArea, { color: colors.textPrimary }]}
                   value={location}
                   onChangeText={(text) => {
                     setLocation(text);
@@ -259,8 +261,8 @@ const CreateProjectScreen = ({ navigation }) => {
             {/* Customer Dropdown - Only show for non-customers */}
             {!isCustomer && (
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Customer <Text style={styles.requiredStar}>*</Text></Text>
-                <View style={[styles.pickerContainer, validationErrors.customerId && styles.inputContainerError]}>
+                <Text style={[styles.label, { color: colors.textPrimary }]}>Customer <Text style={styles.requiredStar}>*</Text></Text>
+                <View style={[styles.pickerContainer, { backgroundColor: colors.background, borderColor: colors.border }, validationErrors.customerId && styles.inputContainerError]}>
                   <MaterialIcons name="person" size={20} color="#0A84FF" style={styles.inputIcon} />
                   <View style={styles.pickerWrapper}>
                     <Picker
@@ -297,8 +299,8 @@ const CreateProjectScreen = ({ navigation }) => {
             {/* Project Manager Dropdown - Only show for admins */}
             {isAdmin && (
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Project manager <Text style={styles.optionalText}>(optional)</Text></Text>
-                <View style={styles.pickerContainer}>
+                <Text style={[styles.label, { color: colors.textPrimary }]}>Project manager <Text style={styles.optionalText}>(optional)</Text></Text>
+                <View style={[styles.pickerContainer, { backgroundColor: colors.background, borderColor: colors.border }]}>
                   <MaterialIcons name="engineering" size={20} color="#0A84FF" style={styles.inputIcon} />
                   <View style={styles.pickerWrapper}>
                     <Picker
@@ -327,10 +329,10 @@ const CreateProjectScreen = ({ navigation }) => {
             {/* Floors Section - Only show for admins */}
             {isAdmin && (
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Floors <Text style={styles.optionalText}>(optional)</Text></Text>
+                <Text style={[styles.label, { color: colors.textPrimary }]}>Floors <Text style={styles.optionalText}>(optional)</Text></Text>
                 <View style={styles.floorInputRow}>
                   <TextInput
-                    style={styles.floorInput}
+                    style={[styles.floorInput, { backgroundColor: colors.background, borderColor: colors.border, color: colors.textPrimary }]}
                     value={newFloorName}
                     onChangeText={setNewFloorName}
                     placeholder="e.g. Ground Floor, 1st Floor"
